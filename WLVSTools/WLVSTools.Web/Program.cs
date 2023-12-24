@@ -1,7 +1,11 @@
 using BundlerMinifier.TagHelpers;
+using Microsoft.EntityFrameworkCore;
+using WLVSTools.Web.Infrastructure.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<AuthDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddControllersWithViews();
 builder.Services.AddBundles(options =>
 {
