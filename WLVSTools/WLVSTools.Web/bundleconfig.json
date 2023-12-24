@@ -26,7 +26,10 @@
   {
     "outputFileName": "wwwroot/bundles/js/jquery.min.js",
     "inputFiles": [
-      "wwwroot/lib/jquery/dist/jquery.js"
+      "wwwroot/lib/jquery/dist/jquery.js",
+      "wwwroot/lib/jquery-validation/dist/jquery.validate.js",
+      "wwwroot/lib/jquery-validation/dist/additional-methods.js",
+      "wwwroot/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"
     ],
     "minify": {
       "enabled": true,

@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@WLVSTools.Web.Core.Models.AppConstant.PortalName | @ViewBag.PageTitle</title>
+    <bundle name="wwwroot/bundles/css/adminlte.min.css" />
+    <bundle name="wwwroot/bundles/css/site.min.css" />
+</head>
+<body>
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+    @RenderBody()
+    <bundle name="wwwroot/bundles/js/jquery.min.js" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <bundle name="wwwroot/bundles/js/adminlte.min.js" />
+    <bundle name="wwwroot/bundles/js/site.min.js" />
+    @RenderSection("Scripts", false)
+</body>
+</html>

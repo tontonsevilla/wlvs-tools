@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WLVSTools.Web.Controllers
 {
+    [Authorize]
     public class PersonalToolboxController : Controller
     {
         public IActionResult AccountList()
