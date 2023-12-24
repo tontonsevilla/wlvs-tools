@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WLVSTools.Web.Core.Data.PersonalToolsEntities;
@@ -11,13 +12,16 @@ namespace WLVSTools.Web.Controllers
     [Authorize]
     public class PersonalToolboxController : BaseController
     {
+        private readonly IMapper _mapper;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly PersonalToolsDbContext _personalToolsDbContext;
 
         public PersonalToolboxController(
+            IMapper mapper,
             UserManager<ApplicationUser> userManager,
             PersonalToolsDbContext personalToolsDbContext) : base(userManager)
         {
+            _mapper = mapper;
             _userManager = userManager;
             _personalToolsDbContext = personalToolsDbContext;
         }
@@ -63,7 +67,8 @@ namespace WLVSTools.Web.Controllers
 
         public IActionResult AccountList()
         {
-            return View();
+            var accounts = _mapper.Map<IEnumerable<AccountViewModel>>(_personalToolsDbContext.Accounts.AsEnumerable());
+            return View(accounts);
         }
 
         public IActionResult ContactList()

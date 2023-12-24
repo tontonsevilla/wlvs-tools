@@ -24,6 +24,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     // Other settings can be configured here
 }).AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.AddAutoMapper(typeof(Program));
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddBundles(options =>
 {
