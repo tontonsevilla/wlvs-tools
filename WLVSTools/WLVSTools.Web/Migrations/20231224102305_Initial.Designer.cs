@@ -11,7 +11,7 @@ using WLVSTools.Web.Infrastructure.Authentication;
 namespace WLVSTools.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231224061038_Initial")]
+    [Migration("20231224102305_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

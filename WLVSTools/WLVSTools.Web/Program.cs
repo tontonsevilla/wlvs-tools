@@ -2,11 +2,15 @@ using BundlerMinifier.TagHelpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WLVSTools.Web.Infrastructure.Authentication;
+using WLVSTools.Web.Infrastructure.PersonalTools;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddDbContext<PersonalToolsDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("PersonalToolBoxConnection")));
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {

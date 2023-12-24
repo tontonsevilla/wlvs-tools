@@ -1,0 +1,35 @@
+﻿@model WLVSTools.Web.ViewModels.PersonalToolbox.AccountViewModel
+
+@{
+    ViewBag.PageTitle = "Personal Toolbox - Create Account";
+}
+
+<form asp-action="CreateAccount">
+    <div class="row mb-5">
+        <div class="col-12 col-md-3">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name"></span>
+        </div>
+        <div class="col-12 col-md-3">
+            <label asp-for="Description"></label>
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description"></span>
+        </div>
+        <div class="col-12 col-md-3">
+            <label asp-for="UserId"></label>
+            <input asp-for="UserId" class="form-control" />
+            <span asp-validation-for="UserId"></span>
+        </div>
+        <div class="col-12 col-md-3">
+            <label asp-for="Password"></label>
+            <input asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <button type="submit" class="btn btn-success float-right">Save</button>
+        </div>
+    </div>
+</form>
