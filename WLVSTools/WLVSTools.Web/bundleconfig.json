@@ -5,18 +5,56 @@
     "outputFileName": "wwwroot/bundles/css/site.min.css",
     "inputFiles": [
       "wwwroot/css/site.css"
-    ]
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
   },
   {
     "outputFileName": "wwwroot/bundles/js/site.min.js",
     "inputFiles": [
       "wwwroot/js/site.js"
-    ]
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
   },
   {
-    "outputFileName": "wwwroot/bundles/lib/bootstrap/dist/css/bootstrap.min.css",
+    "outputFileName": "wwwroot/bundles/js/jquery.min.js",
     "inputFiles": [
-      "wwwroot/lib/bootstrap/dist/css/bootstrap.css"
-    ]
+      "wwwroot/lib/jquery/dist/jquery.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/bundles/css/adminlte.min.css",
+    "inputFiles": [
+      "wwwroot/lib/admin-lte/css/adminlte.css",
+      "wwwroot/lib/admin-lte/plugins/fontawesome-free/css/all.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/bundles/js/adminlte.min.js",
+    "inputFiles": [
+      "wwwroot/lib/admin-lte/js/adminlte.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
   }
 ]
