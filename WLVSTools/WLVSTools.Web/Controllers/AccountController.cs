@@ -8,10 +8,14 @@ namespace WLVSTools.Web.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AccountController(UserManager<ApplicationUser> userManager)
+        public AccountController(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         public IActionResult Login()
@@ -20,9 +24,23 @@ namespace WLVSTools.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(ApplicationUser applicationUser)
+        public async Task<IActionResult> Login(LoginViewModel viewModel)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                var resultPasswordSignInAsync = await _signInManager.PasswordSignInAsync(viewModel.Email,
+                    viewModel.Password,
+                    viewModel.IsPersistent, false);
+
+                if (resultPasswordSignInAsync.Succeeded)
+                {
+                    return RedirectToAction("", "Home");
+                }
+
+                ModelState.AddModelError("", "Invalid account.");
+            }
+
+            return View(viewModel);
         }
 
         public IActionResult Register()
@@ -64,6 +82,13 @@ namespace WLVSTools.Web.Controllers
         public IActionResult RegistrationSuccessful()
         {
             return View();
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+
+            return RedirectToAction("Login");
         }
     }
 }

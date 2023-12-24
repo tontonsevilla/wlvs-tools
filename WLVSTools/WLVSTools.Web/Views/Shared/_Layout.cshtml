@@ -24,7 +24,19 @@
                 </li>
             </ul>
 
-
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="fas fa-user"></i> @User.Identity.Name
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <a href="~/Account/Logout" class="dropdown-item">
+                            Logout&nbsp;<i class="fas fa-sign-out-alt"></i>
+                        </a>
+                        @* <div class="dropdown-divider"></div> *@
+                    </div>
+                </li>
+            </ul>
         </nav>
 
 
@@ -142,7 +154,7 @@
         </footer>
     </div>
     <bundle name="wwwroot/bundles/js/jquery.min.js" />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <bundle name="wwwroot/bundles/js/bootstrap.min.js" />
     <bundle name="wwwroot/bundles/js/adminlte.min.js" />
     <bundle name="wwwroot/bundles/js/site.min.js" />
 

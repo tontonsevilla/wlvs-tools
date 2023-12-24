@@ -1,4 +1,6 @@
-﻿@{
+﻿@model WLVSTools.Web.ViewModels.Accounts.LoginViewModel
+
+@{
     Layout = "_LayoutAnonymous";
     ViewBag.PageTitle = "Login";
 }
@@ -8,31 +10,33 @@
 
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="../../index2.html" class="h1"><b>WLVS</b>Tools</a>
+                <span class="h1"><b>WLVS</b>Tools</span>
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Sign in to start your session</p>
-                <form action="../../index3.html" method="post">
+                <form asp-action="Login" method="post">
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Email">
+                        <input asp-for="Email" class="form-control" placeholder="Email">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
                             </div>
                         </div>
                     </div>
+                    <span asp-validation-for="Email"></span>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Password">
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Password">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
                     </div>
+                    <span asp-validation-for="Password"></span>
                     <div class="row">
                         <div class="col-8">
                             <div class="icheck-primary">
-                                <input type="checkbox" id="remember">
+                                <input asp-for="IsPersistent" type="checkbox" id="remember" value="true">
                                 <label for="remember">
                                     Remember Me
                                 </label>
