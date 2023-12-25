@@ -4,6 +4,8 @@ namespace WLVSTools.Web.ViewModels.PersonalToolbox
 {
     public class AccountViewModel
     {
+        public int Id { get; set; }
+
         [Required]
         public string? Name { get; set; }
 

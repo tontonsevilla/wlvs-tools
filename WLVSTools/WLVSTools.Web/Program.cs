@@ -1,5 +1,6 @@
 using BundlerMinifier.TagHelpers;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using WLVSTools.Web.Infrastructure.Authentication;
 using WLVSTools.Web.Infrastructure.PersonalTools;
@@ -27,6 +28,20 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddControllers();
+
+builder.Services.AddApiVersioning(o =>
+{
+    o.AssumeDefaultVersionWhenUnspecified = true;
+    o.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+    o.ReportApiVersions = true;
+    o.ApiVersionReader = ApiVersionReader.Combine(
+        new QueryStringApiVersionReader("api-version"),
+        new HeaderApiVersionReader("X-Version"),
+        new MediaTypeApiVersionReader("ver"));
+
+});
+
 builder.Services.AddBundles(options =>
 {
     options.AppendVersion = true;
@@ -40,6 +55,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
 app.MapDefaultControllerRoute();
 
 await app.RunAsync();

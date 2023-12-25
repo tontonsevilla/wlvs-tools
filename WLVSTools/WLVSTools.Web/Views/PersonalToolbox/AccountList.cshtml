@@ -4,33 +4,67 @@
     ViewBag.PageTitle = "Personal Toolbox - Account List";
 }
 
-<div class="row">
-    <div class="col-12">
-        <a href="CreateAccount">Create&nbsp;<i class="fa fa-plus-square"></i></a>
+@if (Model != null)
+{
+    <div class="row">
+        <div class="col-12">
+            <a href="CreateAccount">Create&nbsp;<i class="fa fa-plus-square"></i></a>
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-12">
-        <table class="table table-striped table-primary">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>User Id</th>
-                    <th>Password</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var accountViewModel in Model)
-                {
-                    <tr>
-                        <td>@accountViewModel.Name</td>
-                        <td>@accountViewModel.Description</td>
-                        <td>@accountViewModel.UserId</td>
-                        <td>@accountViewModel.Password</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    <div class="row">
+        <div class="col-12">
+            @if (Model.Count() > 0)
+            {
+                <table class="table table-striped table-primary">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>User Id</th>
+                            <th>Password</th>
+                            <th>Action/s</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var accountViewModel in Model)
+                        {
+                            <tr>
+                                <td>@accountViewModel.Name</td>
+                                <td>@accountViewModel.Description</td>
+                                <td>@accountViewModel.UserId</td>
+                                <td>@accountViewModel.Password</td>
+                                <td><button type="button" class="btn btn-xs btn-danger btnDeleteAccount" data-id="@accountViewModel.Id">Delete</button></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <em>No record/s found.</em>
+            }
+        </div>
     </div>
-</div>
+
+    @section Scripts{
+        <script>
+            $(function () {
+                $(".btnDeleteAccount").on("click", function () {
+                    let id = $(this).data("id");
+                    let url = $appendRootToPath("/api/v1/PersonalToolbox/Account/" + id);
+
+                    sendApiRequest(url, "DELETE")
+                    .done(function (data, textStatus, jqXHR) {
+                        window.location.href = "AccountList";
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    })
+                    .always(function (jqXHR, textStatus, errorThrown) {
+                        // Code here
+                    });
+                });
+            });
+        </script>
+    }
+}

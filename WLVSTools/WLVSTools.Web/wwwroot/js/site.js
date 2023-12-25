@@ -27,3 +27,12 @@ function setActiveSideMenu() {
     let activeSideMenuId = localStorage.getItem(WLVSTools_ActiveSideMenu);
     $("#" + activeSideMenuId).addClass("active");
 }
+
+function sendApiRequest(url, method, data = null, contentType = "application/x-www-form-urlencoded") {
+    return $.ajax({
+        url: url,
+        method: method,
+        data: data,
+        contentType: contentType
+    });
+}

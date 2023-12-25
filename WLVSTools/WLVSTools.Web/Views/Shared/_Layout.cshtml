@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject IHttpContextAccessor Accessor
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,6 +8,11 @@
     <title>@WLVSTools.Web.Core.Models.AppConstant.PortalName | @ViewBag.PageTitle</title>
     <bundle name="wwwroot/bundles/css/adminlte.min.css" />
     <bundle name="wwwroot/bundles/css/site.min.css" />
+    <script>
+        var $appendRootToPath = (urlPath) => {
+            return "@(Accessor.HttpContext.Request.PathBase)" + urlPath;
+        };
+    </script>
 </head>
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
@@ -157,6 +164,6 @@
     <bundle name="wwwroot/bundles/js/bootstrap.min.js" />
     <bundle name="wwwroot/bundles/js/adminlte.min.js" />
     <bundle name="wwwroot/bundles/js/site.min.js" />
-
+    @RenderSection("Scripts", false)
 </body>
 </html>
