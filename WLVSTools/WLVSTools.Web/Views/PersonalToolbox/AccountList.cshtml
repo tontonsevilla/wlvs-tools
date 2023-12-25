@@ -6,7 +6,7 @@
 
 @if (Model != null)
 {
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-12">
             <a href="CreateAccount">Create&nbsp;<i class="fa fa-plus-square"></i></a>
         </div>
@@ -32,7 +32,7 @@
                                 <td>@accountViewModel.Name</td>
                                 <td>@accountViewModel.Description</td>
                                 <td>@accountViewModel.UserId</td>
-                                <td>@accountViewModel.Password</td>
+                                <td>@accountViewModel.Password&nbsp;<span role="button" class="password-copy far fa-copy" data-password="@accountViewModel.Password"></span></td>
                                 <td><button type="button" class="btn btn-xs btn-danger btnDeleteAccount" data-id="@accountViewModel.Id">Delete</button></td>
                             </tr>
                         }
@@ -56,6 +56,22 @@
                     sendApiRequest(url, "DELETE")
                     .done(function (data, textStatus, jqXHR) {
                         window.location.href = "AccountList";
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                        alert(errorThrown);
+                    })
+                    .always(function (jqXHR, textStatus, errorThrown) {
+                        // Code here
+                    });
+                });
+
+                $(".password-copy").on("click", function () {
+                    let password = $(this).data("password");
+                    let url = $appendRootToPath("/api/v1/PersonalToolbox/Password);
+
+                    sendApiRequest(url, "POST", { password: password })
+                    .done(function (response, textStatus, jqXHR) {
+
                     })
                     .fail(function (jqXHR, textStatus, errorThrown) {
                         alert(errorThrown);

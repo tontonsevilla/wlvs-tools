@@ -42,6 +42,12 @@ builder.Services.AddApiVersioning(o =>
 
 });
 
+//Set Session Timeout. Default is 20 minutes.
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(60);
+});
+
 builder.Services.AddBundles(options =>
 {
     options.AppendVersion = true;

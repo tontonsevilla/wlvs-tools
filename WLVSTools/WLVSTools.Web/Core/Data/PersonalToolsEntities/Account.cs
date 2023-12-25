@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using WLVSTools.Web.Core.EncryptionDecryption;
 
 namespace WLVSTools.Web.Core.Data.PersonalToolsEntities
 {
@@ -21,7 +22,7 @@ namespace WLVSTools.Web.Core.Data.PersonalToolsEntities
             Name = name;
             Description = description;
             UserId = userId;
-            Password = password;
+            Password = AesOperation.EncryptString(new Guid(modifyUser).ToString(), password);
             CreateUser = modifyUser;
             ModifyUser = modifyUser;
             CreateDate = DateTime.Now;
@@ -33,7 +34,7 @@ namespace WLVSTools.Web.Core.Data.PersonalToolsEntities
             Name = name;
             Description = description;
             UserId = userId;
-            Password = password;
+            Password = AesOperation.EncryptString(new Guid(modifyUser).ToString(), password);
             ModifyUser = modifyUser;
             ModifyDate = DateTime.Now;
         }
