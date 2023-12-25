@@ -1,7 +1,6 @@
 ﻿namespace WLVSTools.Web.Core.Models.Common
 {
     public class ServiceResponse<T>
-        where T : class, new()
     {
         private T? _model;
         private List<string> _messages = new List<string>();
@@ -19,6 +18,26 @@
             get
             {
                 return _messages;
+            }
+        }
+
+        public string HtmlMessages
+        {
+            get
+            {
+                var htmlString = "";
+
+                foreach (var message in _messages)
+                {
+                    htmlString += $"<li>{message}</li>";
+                }
+
+                if (_messages.Count > 0)
+                {
+                    return $"<ul>{htmlString}</ul>";
+                }
+
+                return htmlString;
             }
         }
 
@@ -46,7 +65,7 @@
             }
         }
 
-        public void AddMessages(string message)
+        public void AddMessage(string message)
         {
             _messages.Add(message);
         }

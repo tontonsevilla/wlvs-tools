@@ -41,7 +41,8 @@
     "outputFileName": "wwwroot/bundles/css/adminlte.min.css",
     "inputFiles": [
       "wwwroot/lib/admin-lte/css/adminlte.css",
-      "wwwroot/lib/admin-lte/plugins/fontawesome-free/css/all.css"
+      "wwwroot/lib/admin-lte/plugins/fontawesome-free/css/all.css",
+      "wwwroot/lib/admin-lte/plugins/toastr/toastr.css"
     ],
     "minify": {
       "enabled": true,
@@ -52,7 +53,8 @@
   {
     "outputFileName": "wwwroot/bundles/js/adminlte.min.js",
     "inputFiles": [
-      "wwwroot/lib/admin-lte/js/adminlte.js"
+      "wwwroot/lib/admin-lte/js/adminlte.js",
+      "wwwroot/lib/admin-lte/plugins/toastr/toastr.min.js"
     ],
     "minify": {
       "enabled": true,

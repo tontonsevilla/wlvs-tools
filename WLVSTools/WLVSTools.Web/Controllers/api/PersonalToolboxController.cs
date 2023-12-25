@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using WLVSTools.Web.Core.EncryptionDecryption;
 using WLVSTools.Web.Core.Models.Common;
 using WLVSTools.Web.Infrastructure.PersonalTools;
 using WLVSTools.Web.ViewModels.PersonalToolbox;
@@ -65,6 +66,23 @@ namespace WLVSTools.Web.Controllers.api
             }
 
             return Ok();
+        }
+
+        [HttpPost("Password")]
+        public IActionResult GetPassword([FromBody] PrimitiveType<string> password)
+        {
+            var response = new ServiceResponse<string>();
+
+            try
+            {
+                response.AddModel(AesOperation.DecryptString(User.Identity.Name, password.Value));
+            }
+            catch
+            {
+                response.AddMessage("Something went wrong.");
+            }
+
+            return Ok(response);
         }
     }
 }
