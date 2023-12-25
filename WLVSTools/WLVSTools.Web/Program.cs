@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
+using System.Net;
 using System.Text;
 using WLVSTools.Web.Infrastructure.Authentication;
 using WLVSTools.Web.Infrastructure.PersonalTools;
@@ -30,25 +32,44 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    // custom scheme defined in .AddPolicyScheme() below
+    options.DefaultAuthenticateScheme = "JWT_OR_COOKIE";
+    options.DefaultScheme = "JWT_OR_COOKIE";
+    options.DefaultChallengeScheme = "JWT_OR_COOKIE";
 })
-.AddJwtBearer(o =>
+.AddCookie("Cookies", options =>
 {
-    o.TokenValidationParameters = new TokenValidationParameters
+    options.LoginPath = "/Account/Login";
+    options.ExpireTimeSpan = TimeSpan.FromDays(1);
+})
+.AddJwtBearer("Bearer", options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey
-        (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = false,
         ValidateIssuerSigningKey = true
     };
+})
+// this is the key piece!
+.AddPolicyScheme("JWT_OR_COOKIE", "JWT_OR_COOKIE", options =>
+{
+    // runs on each request
+    options.ForwardDefaultSelector = context =>
+    {
+        // filter by auth type
+        string authorization = context.Request.Headers[HeaderNames.Authorization];
+        if (!string.IsNullOrEmpty(authorization) && authorization.StartsWith("Bearer "))
+            return "Bearer";
+
+        // otherwise always check for cookie auth
+        return "Cookies";
+    };
 });
-//builder.Services.AddAuthorization();
 
 builder.Services.AddAutoMapper(typeof(Program));
 
@@ -86,8 +107,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
+
 app.UseHttpsRedirection();
+
+// add these before controllers and any
+// handlers that need to be authenticated
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 app.MapDefaultControllerRoute();
 
