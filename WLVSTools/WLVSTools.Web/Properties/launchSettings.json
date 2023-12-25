@@ -28,19 +28,23 @@
     "Local IIS": {
       "commandName": "IIS",
       "launchBrowser": true,
-      "launchUrl": "https://localhost/WLVSTools"
+      "launchUrl": "https://localhost/WLVSTools",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "https://localhost/WLVSTools",
+      "sslPort": 0
+    },
     "iisExpress": {
       "applicationUrl": "http://localhost:1509",
       "sslPort": 44376
-    },
-    "iis": {
-      "applicationUrl": "https://localhost/WLVSTools"
     }
   }
 }

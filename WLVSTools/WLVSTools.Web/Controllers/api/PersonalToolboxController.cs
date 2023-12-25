@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using WLVSTools.Web.Core.EncryptionDecryption;
+using WLVSTools.Web.Core.General;
 using WLVSTools.Web.Core.Models.Common;
 using WLVSTools.Web.Infrastructure.PersonalTools;
 using WLVSTools.Web.ViewModels.PersonalToolbox;
 
 namespace WLVSTools.Web.Controllers.api
 {
+    [Authorize]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
@@ -75,11 +79,13 @@ namespace WLVSTools.Web.Controllers.api
 
             try
             {
-                response.AddModel(AesOperation.DecryptString(User.Identity.Name, password.Value));
+                var claim = User.Claims.Where(claim => claim.Type == ClaimTypes.Email).FirstOrDefault();
+                response.AddModel(AesOperation.DecryptString(claim.Value, password.Value));
             }
-            catch
+            catch(Exception ex)
             {
-                response.AddMessage("Something went wrong.");
+                var messages = Helper.GetExceptionMessages(ex);
+                response.AddMessages(messages);
             }
 
             return Ok(response);
