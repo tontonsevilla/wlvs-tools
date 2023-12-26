@@ -12,6 +12,7 @@ using System.Net;
 using System.Text;
 using WLVSTools.Web.Core.Models;
 using WLVSTools.Web.Infrastructure.Authentication;
+using WLVSTools.Web.Infrastructure.ExceptionsLogging;
 using WLVSTools.Web.Infrastructure.PersonalTools;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -89,6 +90,9 @@ static void ConfigureDbContext(WebApplicationBuilder builder)
 
     builder.Services.AddDbContext<PersonalToolsDbContext>(options =>
         options.UseSqlite(builder.Configuration.GetConnectionString("PersonalToolBoxConnection")));
+
+    builder.Services.AddDbContext<ExceptionLoggingDbContext>(options =>
+        options.UseSqlite(builder.Configuration.GetConnectionString("ExceptionLoggingConnection")));
 }
 
 static void ConfigureIdentity(WebApplicationBuilder builder)
