@@ -1,5 +1,7 @@
 using BundlerMinifier.TagHelpers;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using System.Net;
 using System.Text;
+using WLVSTools.Web.Core.Models;
 using WLVSTools.Web.Infrastructure.Authentication;
 using WLVSTools.Web.Infrastructure.PersonalTools;
 
@@ -28,21 +31,21 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.Password.RequireLowercase = true;
     options.Password.RequiredUniqueChars = 4;
     // Other settings can be configured here
-}).AddEntityFrameworkStores<ApplicationDbContext>();
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(options =>
 {
-    // custom scheme defined in .AddPolicyScheme() below
-    options.DefaultAuthenticateScheme = "JWT_OR_COOKIE";
-    options.DefaultScheme = "JWT_OR_COOKIE";
-    options.DefaultChallengeScheme = "JWT_OR_COOKIE";
+    options.DefaultScheme = AppConstant.DefaultScheme;
+    options.DefaultChallengeScheme = AppConstant.DefaultScheme;
 })
-.AddCookie("Cookies", options =>
+.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
 {
     options.LoginPath = "/Account/Login";
     options.ExpireTimeSpan = TimeSpan.FromDays(1);
 })
-.AddJwtBearer("Bearer", options =>
+.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -51,24 +54,23 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
         ValidateIssuer = true,
         ValidateAudience = true,
-        ValidateLifetime = false,
         ValidateIssuerSigningKey = true
     };
 })
 // this is the key piece!
-.AddPolicyScheme("JWT_OR_COOKIE", "JWT_OR_COOKIE", options =>
+.AddPolicyScheme(AppConstant.DefaultScheme, AppConstant.DefaultScheme, options =>
 {
     // runs on each request
-    options.ForwardDefaultSelector = context =>
-    {
-        // filter by auth type
-        string authorization = context.Request.Headers[HeaderNames.Authorization];
-        if (!string.IsNullOrEmpty(authorization) && authorization.StartsWith("Bearer "))
-            return "Bearer";
+   options.ForwardDefaultSelector = context =>
+   {
+       // filter by auth type
+       string authorization = context.Request.Headers[HeaderNames.Authorization];
+       if (!string.IsNullOrEmpty(authorization) && authorization.StartsWith($"{JwtBearerDefaults.AuthenticationScheme} "))
+           return JwtBearerDefaults.AuthenticationScheme;
 
-        // otherwise always check for cookie auth
-        return "Cookies";
-    };
+       // otherwise always check for cookie auth
+       return CookieAuthenticationDefaults.AuthenticationScheme;
+   };
 });
 
 builder.Services.AddAutoMapper(typeof(Program));

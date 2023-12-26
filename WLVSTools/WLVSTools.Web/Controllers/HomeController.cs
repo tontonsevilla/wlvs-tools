@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WLVSTools.Web.Core.Models;
 
 namespace WLVSTools.Web.Controllers
 {

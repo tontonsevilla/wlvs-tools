@@ -1,16 +1,18 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WLVSTools.Web.Core.EncryptionDecryption;
 using WLVSTools.Web.Core.General;
+using WLVSTools.Web.Core.Models;
 using WLVSTools.Web.Core.Models.Common;
 using WLVSTools.Web.Infrastructure.PersonalTools;
 using WLVSTools.Web.ViewModels.PersonalToolbox;
 
 namespace WLVSTools.Web.Controllers.api
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
@@ -29,7 +31,12 @@ namespace WLVSTools.Web.Controllers.api
 
         public IActionResult Get()
         {
-            var response = new ServiceResponse<EmptyResponse>();
+            var response = new ServiceResponse<MessageResponse>();
+
+            response.AddModel(new MessageResponse
+            {
+                Message = $"Date: {DateTime.Now} | Utc Date: {DateTime.UtcNow}"
+            });
 
             return Ok(response);
         }

@@ -50,7 +50,7 @@ namespace WLVSTools.Web.Controllers.api
                         new Claim(JwtRegisteredClaimNames.Jti,
                         Guid.NewGuid().ToString())
                     }),
-                    Expires = DateTime.UtcNow.AddMinutes(5),
+                    Expires = DateTime.UtcNow.AddMinutes(1),
                     Issuer = issuer,
                     Audience = audience,
                     SigningCredentials = new SigningCredentials(
@@ -60,8 +60,8 @@ namespace WLVSTools.Web.Controllers.api
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 var jwtToken = tokenHandler.WriteToken(token);
-                var stringToken = tokenHandler.WriteToken(token);
-                return Ok(stringToken);
+
+                return Ok(jwtToken);
             }
 
             return Unauthorized();

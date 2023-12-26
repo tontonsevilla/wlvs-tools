@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using WLVSTools.Web.Core.Models;
 using WLVSTools.Web.Infrastructure.Authentication;
 using WLVSTools.Web.ViewModels.Accounts;
 
@@ -85,6 +86,7 @@ namespace WLVSTools.Web.Controllers
             return View();
         }
 
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
