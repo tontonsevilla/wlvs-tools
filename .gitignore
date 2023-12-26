@@ -5,6 +5,7 @@
 
 # Added by Developer
 Database
+appsettings.Development.json
 
 # User-specific files
 *.rsuser
