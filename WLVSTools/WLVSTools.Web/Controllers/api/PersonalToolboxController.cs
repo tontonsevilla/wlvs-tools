@@ -86,8 +86,8 @@ namespace WLVSTools.Web.Controllers.api
 
             try
             {
-                var claim = User.Claims.Where(claim => claim.Type == ClaimTypes.Email).FirstOrDefault();
-                response.AddModel(AesOperation.DecryptString(claim.Value, password.Value));
+                var claim = User.Claims.Where(claim => claim.Type == ClaimTypes.NameIdentifier).FirstOrDefault();
+                response.AddModel(AesOperation.DecryptString(claim.Value.Replace("-", ""), password.Value));
             }
             catch(Exception ex)
             {

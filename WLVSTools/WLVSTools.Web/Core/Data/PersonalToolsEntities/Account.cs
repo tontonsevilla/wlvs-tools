@@ -22,7 +22,7 @@ namespace WLVSTools.Web.Core.Data.PersonalToolsEntities
             Name = name;
             Description = description;
             UserId = userId;
-            Password = AesOperation.EncryptString(new Guid(modifyUser).ToString(), password);
+            Password = AesOperation.EncryptString(modifyUser.Replace("-", ""), password);
             CreateUser = modifyUser;
             ModifyUser = modifyUser;
             CreateDate = DateTime.Now;
@@ -34,7 +34,7 @@ namespace WLVSTools.Web.Core.Data.PersonalToolsEntities
             Name = name;
             Description = description;
             UserId = userId;
-            Password = AesOperation.EncryptString(new Guid(modifyUser).ToString(), password);
+            Password = AesOperation.EncryptString(modifyUser.Replace("-", ""), password);
             ModifyUser = modifyUser;
             ModifyDate = DateTime.Now;
         }

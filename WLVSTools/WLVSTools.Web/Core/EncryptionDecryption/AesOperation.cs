@@ -8,50 +8,78 @@ namespace WLVSTools.Web.Core.EncryptionDecryption
     /// </summary>
     public static class AesOperation
     {
-        public static string EncryptString(string key, string plainText)
+        public static string EncryptString(string key, string toEncrypt)
         {
-            // Convert the plaintext string to a byte array
-            byte[] plaintextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            var keyArray = Convert.FromBase64String(key);
+            var info = Encoding.ASCII.GetBytes(toEncrypt);
 
-            // Derive a new password using the PBKDF2 algorithm and a random salt
-            Rfc2898DeriveBytes passwordBytes = new Rfc2898DeriveBytes(key, 20);
+            var encrypted = Encrypt(keyArray, info);
 
-            // Use the password to encrypt the plaintext
-            Aes encryptor = Aes.Create();
-            encryptor.Padding = PaddingMode.PKCS7;
-            encryptor.Key = passwordBytes.GetBytes(32);
-            encryptor.IV = passwordBytes.GetBytes(16);
-            using (MemoryStream ms = new MemoryStream())
+            return Convert.ToBase64String(encrypted);
+        }
+
+        public static string DecryptString(string key, string cipherString)
+        {
+            var keyArray = Convert.FromBase64String(key);
+            var cipherText = Convert.FromBase64String(cipherString);
+
+            var decrypted = Decrypt(keyArray, cipherText);
+
+            return Encoding.ASCII.GetString(decrypted);
+        }
+
+        private static byte[] Encrypt(byte[] key, byte[] info)
+        {
+            using (var cipher = Aes.Create())
             {
-                using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
+                cipher.Key = key;
+                cipher.Mode = CipherMode.CBC;
+                cipher.Padding = PaddingMode.ISO10126;
+
+                using (var ms = new MemoryStream())
                 {
-                    cs.Write(plaintextBytes, 0, plaintextBytes.Length);
+                    using (var cs = new CryptoStream(ms, cipher.CreateEncryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(info, 0, info.Length);
+                    }
+
+                    var ciphertext = ms.ToArray();
+
+                    var message = new byte[cipher.IV.Length + ciphertext.Length];
+                    cipher.IV.CopyTo(message, 0);
+                    ciphertext.CopyTo(message, cipher.IV.Length);
+                    return message;
                 }
-                return Convert.ToBase64String(ms.ToArray());
             }
         }
 
-        public static string DecryptString(string key, string encrypted)
+        private static byte[] Decrypt(byte[] key, byte[] ciphertext)
         {
-            // Convert the encrypted string to a byte array
-            byte[] encryptedBytes = Convert.FromBase64String(encrypted);
-
-            // Derive the password using the PBKDF2 algorithm
-            Rfc2898DeriveBytes passwordBytes = new Rfc2898DeriveBytes(key, 20);
-
-            // Use the password to decrypt the encrypted string
-            Aes encryptor = Aes.Create();
-            encryptor.Padding = PaddingMode.PKCS7;
-            encryptor.Key = passwordBytes.GetBytes(32);
-            encryptor.IV = passwordBytes.GetBytes(16);
-            using (MemoryStream ms = new MemoryStream())
+            using (var cipher = Aes.Create())
             {
-                using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
+                cipher.Key = key;
+                cipher.Mode = CipherMode.CBC;
+                cipher.Padding = PaddingMode.ISO10126;
+
+                var ivSize = cipher.IV.Length;
+                var iv = new byte[ivSize];
+                Array.Copy(ciphertext, iv, ivSize);
+                cipher.IV = iv;
+
+                var data = new byte[ciphertext.Length - ivSize];
+                Array.Copy(ciphertext, ivSize, data, 0, data.Length);
+
+                using (var ms = new MemoryStream())
                 {
-                    cs.Write(encryptedBytes, 0, encryptedBytes.Length);
+                    using (var cs = new CryptoStream(ms, cipher.CreateDecryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(data, 0, data.Length);
+                    }
+
+                    return ms.ToArray();
                 }
-                return System.Text.Encoding.UTF8.GetString(ms.ToArray());
             }
         }
+
     }
 }
