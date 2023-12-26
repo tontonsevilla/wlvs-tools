@@ -66,11 +66,11 @@
                 });
 
                 $(".password-copy").on("click", function () {
-                let toastrTitle = "Get Password";
+                    let toastrTitle = "Get Password";
                     let password = $(this).data("password");
-                    let url = $appendRootToPath("/api/v1/PersonalToolbox/Password);
+                    let url = $appendRootToPath("/api/v1/PersonalToolbox/Password");
 
-                    sendApiRequest(url, "POST", { password: password })
+                    sendApiRequest(url, "POST", JSON.stringify({ password: password }), "application/json")
                     .done(function (response, textStatus, jqXHR) {
                         if (response.hasError) {
                                 toastr.error(response.htmlMessages, toastrTitle);

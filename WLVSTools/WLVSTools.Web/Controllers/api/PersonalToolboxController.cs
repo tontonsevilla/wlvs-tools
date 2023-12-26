@@ -12,7 +12,7 @@ using WLVSTools.Web.ViewModels.PersonalToolbox;
 
 namespace WLVSTools.Web.Controllers.api
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = AppConstant.DefaultScheme)]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
