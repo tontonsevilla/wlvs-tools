@@ -1,5 +1,6 @@
 using BundlerMinifier.TagHelpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Versioning;
@@ -224,35 +225,56 @@ static void ConfigureOpenId(WebApplicationBuilder builder)
         opt.DefaultScheme = AppConstant.DefaultScheme;
         opt.DefaultChallengeScheme = AppConstant.DefaultScheme;
     })
+    .AddGoogle(options => {
+        if (builder != null)
+        {
+            var clientId = builder.Configuration["Authentication:Google:ClientId"];
+            if (!string.IsNullOrWhiteSpace(clientId))
+                options.ClientId = clientId;
+
+            var clientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+            if (!string.IsNullOrWhiteSpace(clientSecret))
+                options.ClientSecret = clientSecret;
+        }
+    })
     .AddPolicyScheme(AppConstant.DefaultScheme, AppConstant.DefaultScheme, options =>
     {
         options.ForwardDefaultSelector = context =>
         {
-            string authorization = context.Request.Headers[HeaderNames.Authorization];
-            if (!string.IsNullOrEmpty(authorization) && authorization.StartsWith("Bearer "))
+            if (context != null && context.Request != null)
             {
-                var token = authorization.Substring("Bearer ".Length).Trim();
-                var jwtHandler = new JwtSecurityTokenHandler();
+                var headerAuthrorization = context.Request.Headers[HeaderNames.Authorization];
 
-                // it's a self contained access token and not encrypted
-                if (jwtHandler.CanReadToken(token))
+                if (!string.IsNullOrWhiteSpace(headerAuthrorization))
                 {
-                    var issuer = jwtHandler.ReadJwtToken(token).Issuer;
-                    if (issuer == AppConstant.AuthenticationSchemes.OPEN_ID_DICT)
-                    {
-                        return AppConstant.AuthenticationSchemes.OPEN_ID_DICT;
-                    }
-                    /*
-                    if (issuer == Consts.MY_AUTH0_ISS) // Auth0
-                    {
-                        return Consts.MY_AUTH0_SCHEME;
-                    }
+                    string authorization = headerAuthrorization.ToString();
 
-                    if (issuer == Consts.MY_AAD_ISS) // AAD
+                    if (!string.IsNullOrEmpty(authorization) && authorization.StartsWith("Bearer "))
                     {
-                        return Consts.MY_AAD_SCHEME;
+                        var token = authorization.Substring("Bearer ".Length).Trim();
+                        var jwtHandler = new JwtSecurityTokenHandler();
+
+                        // it's a self contained access token and not encrypted
+                        if (jwtHandler.CanReadToken(token))
+                        {
+                            var issuer = jwtHandler.ReadJwtToken(token).Issuer;
+                            if (issuer == AppConstant.AuthenticationSchemes.OPEN_ID_DICT)
+                            {
+                                return AppConstant.AuthenticationSchemes.OPEN_ID_DICT;
+                            }
+                            /*
+                            if (issuer == Consts.MY_AUTH0_ISS) // Auth0
+                            {
+                                return Consts.MY_AUTH0_SCHEME;
+                            }
+
+                            if (issuer == Consts.MY_AAD_ISS) // AAD
+                            {
+                                return Consts.MY_AAD_SCHEME;
+                            }
+                            */
+                        }
                     }
-                    */
                 }
             }
 
