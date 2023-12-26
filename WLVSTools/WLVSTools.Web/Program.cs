@@ -48,9 +48,6 @@ static void ConfigureServices(WebApplicationBuilder builder)
 {
     ConfigureDbContext(builder);
     ConfigureIdentity(builder);
-    //ConfgureAuthentication(builder);
-    //builder.Services.AddAuthentication();
-
     ConfigureJWT(builder);
 
     // OTHER CONFUGRATIONS

@@ -3,6 +3,6 @@
     public static class AppConstant
     {
         public const string PortalName = "WLVS Tools";
-        public const string DefaultScheme = "JWT_OR_COOKIE";
+        public const string DefaultScheme = "UKNOWN";
     }
 }
