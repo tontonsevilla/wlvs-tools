@@ -49,29 +49,8 @@ static void ConfigureServices(WebApplicationBuilder builder)
 {
     ConfigureDbContext(builder);
     ConfigureIdentity(builder);
-    ConfigureJWT(builder);
-
-    builder.Services.AddOpenIddict()
-        .AddCore(configuration =>
-        {
-            configuration.UseEntityFrameworkCore()
-                .UseDbContext<OpenIdDbContext>();
-        })
-        .AddServer(openIddictServerBuilder =>
-        {
-            //enable client_credentials grant_tupe support on server level
-            openIddictServerBuilder.AllowClientCredentialsFlow();
-            //specify token endpoint uri
-            openIddictServerBuilder.SetTokenEndpointUris("token");
-            //secret registration
-            openIddictServerBuilder.AddDevelopmentEncryptionCertificate()
-                .AddDevelopmentSigningCertificate();
-            openIddictServerBuilder.DisableAccessTokenEncryption();
-            //the asp request handlers configuration itself
-            openIddictServerBuilder.UseAspNetCore().EnableTokenEndpointPassthrough();
-        });
-
-    builder.Services.AddHostedService<ClientSeeder>();
+    //ConfigureJWT(builder);
+    ConfigureOpenId(builder);
 
     // OTHER CONFUGRATIONS
     builder.Services.AddAutoMapper(typeof(Program));
@@ -105,14 +84,17 @@ static void ConfigureServices(WebApplicationBuilder builder)
 
 static void ConfigureDbContext(WebApplicationBuilder builder)
 {
-    builder.Services.AddDbContext<OpenIdDbContext>(options =>
-    {
-        options.UseInMemoryDatabase(nameof(OpenIdDbContext));
-        options.UseOpenIddict();
-    });
+    //builder.Services.AddDbContext<DbContext>(options =>
+    //{
+    //    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+    //    options.UseOpenIddict();
+    //});
 
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    {
+        options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+        options.UseCustomOAuth();
+    });
 
     builder.Services.AddDbContext<PersonalToolsDbContext>(options =>
         options.UseSqlite(builder.Configuration.GetConnectionString("PersonalToolBoxConnection")));
@@ -213,4 +195,30 @@ static void ConfigureJWT(WebApplicationBuilder builder)
             return "Identity.Application";
         };
     });
+}
+
+static void ConfigureOpenId(WebApplicationBuilder builder)
+{
+    builder.Services.AddOpenIddict()
+            .AddCore(configuration =>
+            {
+                configuration.UseEntityFrameworkCore()
+                    .ReplaceWithCustomOAuthEntities()
+                    .UseDbContext<ApplicationDbContext>();
+            })
+            .AddServer(openIddictServerBuilder =>
+            {
+                //enable client_credentials grant_tupe support on server level
+                openIddictServerBuilder.AllowClientCredentialsFlow();
+                //specify token endpoint uri
+                openIddictServerBuilder.SetTokenEndpointUris("token");
+                //secret registration
+                openIddictServerBuilder.AddDevelopmentEncryptionCertificate()
+                    .AddDevelopmentSigningCertificate();
+                openIddictServerBuilder.DisableAccessTokenEncryption();
+                //the asp request handlers configuration itself
+                openIddictServerBuilder.UseAspNetCore().EnableTokenEndpointPassthrough();
+            });
+
+    builder.Services.AddHostedService<ClientSeeder>();
 }
