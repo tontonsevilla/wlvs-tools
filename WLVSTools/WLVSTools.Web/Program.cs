@@ -12,6 +12,7 @@ using System.Net;
 using System.Text;
 using WLVSTools.Web.Core.Models;
 using WLVSTools.Web.Infrastructure.Authentication;
+using WLVSTools.Web.Infrastructure.Authentication.OpenId;
 using WLVSTools.Web.Infrastructure.ExceptionsLogging;
 using WLVSTools.Web.Infrastructure.PersonalTools;
 
@@ -50,6 +51,28 @@ static void ConfigureServices(WebApplicationBuilder builder)
     ConfigureIdentity(builder);
     ConfigureJWT(builder);
 
+    builder.Services.AddOpenIddict()
+        .AddCore(configuration =>
+        {
+            configuration.UseEntityFrameworkCore()
+                .UseDbContext<OpenIdDbContext>();
+        })
+        .AddServer(openIddictServerBuilder =>
+        {
+            //enable client_credentials grant_tupe support on server level
+            openIddictServerBuilder.AllowClientCredentialsFlow();
+            //specify token endpoint uri
+            openIddictServerBuilder.SetTokenEndpointUris("token");
+            //secret registration
+            openIddictServerBuilder.AddDevelopmentEncryptionCertificate()
+                .AddDevelopmentSigningCertificate();
+            openIddictServerBuilder.DisableAccessTokenEncryption();
+            //the asp request handlers configuration itself
+            openIddictServerBuilder.UseAspNetCore().EnableTokenEndpointPassthrough();
+        });
+
+    builder.Services.AddHostedService<ClientSeeder>();
+
     // OTHER CONFUGRATIONS
     builder.Services.AddAutoMapper(typeof(Program));
 
@@ -82,8 +105,14 @@ static void ConfigureServices(WebApplicationBuilder builder)
 
 static void ConfigureDbContext(WebApplicationBuilder builder)
 {
+    builder.Services.AddDbContext<OpenIdDbContext>(options =>
+    {
+        options.UseInMemoryDatabase(nameof(OpenIdDbContext));
+        options.UseOpenIddict();
+    });
+
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+        options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
     builder.Services.AddDbContext<PersonalToolsDbContext>(options =>
         options.UseSqlite(builder.Configuration.GetConnectionString("PersonalToolBoxConnection")));
@@ -105,8 +134,8 @@ static void ConfigureIdentity(WebApplicationBuilder builder)
         options.Password.RequiredUniqueChars = 4;
         // Other settings can be configured here
     })
-        .AddEntityFrameworkStores<ApplicationDbContext>()
-        .AddDefaultTokenProviders();
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 }
 
 static void ConfgureAuthentication(WebApplicationBuilder builder)

@@ -27,8 +27,10 @@
     },
     "Local IIS": {
       "commandName": "IIS",
+      "dotnetRunMessages": true,
       "launchBrowser": true,
-      "launchUrl": "https://localhost/WLVSTools",
+      "applicationUrl": "https://localhost/WLVSTools;",
+      "launchUrl": ".well-known/openid-configuration",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
