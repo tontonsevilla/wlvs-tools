@@ -1,0 +1,10 @@
+﻿@model List<string>
+
+@{
+    ViewBag.PageTitle = "Administration - Databases";
+}
+
+@foreach(var file in Model)
+{
+    <p>@file</p>
+}
