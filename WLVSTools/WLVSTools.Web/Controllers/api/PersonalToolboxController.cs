@@ -86,7 +86,14 @@ namespace WLVSTools.Web.Controllers.api
 
             try
             {
-                var claim = User.Claims.Where(claim => claim.Type == ClaimTypes.NameIdentifier).FirstOrDefault();
+                // JWT
+                var claim = User.Claims.Where(claim => claim.Type == "Id").FirstOrDefault();
+                if (claim == null)
+                {
+                    //Identity Application
+                    claim = User.Claims.Where(claim => claim.Type == ClaimTypes.NameIdentifier).FirstOrDefault();
+                }
+
                 response.AddModel(AesOperation.DecryptString(claim.Value.Replace("-", ""), password.Value));
             }
             catch(Exception ex)

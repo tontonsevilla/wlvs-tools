@@ -44,9 +44,9 @@ namespace WLVSTools.Web.Controllers.api
                 {
                     Subject = new ClaimsIdentity(new[]
                     {
-                        new Claim("Id", Guid.NewGuid().ToString()),
-                        new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                        new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                        new Claim("Id", applicationUser.Id),
+                        new Claim(JwtRegisteredClaimNames.Sub, applicationUser.Email),
+                        new Claim(JwtRegisteredClaimNames.Email, applicationUser.Email),
                         new Claim(JwtRegisteredClaimNames.Jti,
                         Guid.NewGuid().ToString())
                     }),
