@@ -70,7 +70,7 @@
                     let password = $(this).data("password");
                     let url = $appendRootToPath("/api/v1/PersonalToolbox/Password");
 
-                    sendApiRequest(url, "POST", JSON.stringify({ password: password }), "application/json")
+                    sendApiRequest(url, "POST", JSON.stringify({ value: password }), "application/json")
                     .done(function (response, textStatus, jqXHR) {
                         if (response.hasError) {
                                 toastr.error(response.htmlMessages, toastrTitle);
