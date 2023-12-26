@@ -1,14 +1,12 @@
 using BundlerMinifier.TagHelpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
-using System.Configuration;
-using System.Net;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using WLVSTools.Web.Core.Models;
 using WLVSTools.Web.Infrastructure.Authentication;
@@ -49,7 +47,6 @@ static void ConfigureServices(WebApplicationBuilder builder)
 {
     ConfigureDbContext(builder);
     ConfigureIdentity(builder);
-    //ConfigureJWT(builder);
     ConfigureOpenId(builder);
 
     // OTHER CONFUGRATIONS
@@ -67,7 +64,6 @@ static void ConfigureServices(WebApplicationBuilder builder)
             new QueryStringApiVersionReader("api-version"),
             new HeaderApiVersionReader("X-Version"),
             new MediaTypeApiVersionReader("ver"));
-
     });
 
     //Set Session Timeout. Default is 20 minutes.
@@ -199,26 +195,69 @@ static void ConfigureJWT(WebApplicationBuilder builder)
 
 static void ConfigureOpenId(WebApplicationBuilder builder)
 {
-    builder.Services.AddOpenIddict()
-            .AddCore(configuration =>
-            {
-                configuration.UseEntityFrameworkCore()
-                    .ReplaceWithCustomOAuthEntities()
-                    .UseDbContext<ApplicationDbContext>();
-            })
-            .AddServer(openIddictServerBuilder =>
-            {
-                //enable client_credentials grant_tupe support on server level
-                openIddictServerBuilder.AllowClientCredentialsFlow();
-                //specify token endpoint uri
-                openIddictServerBuilder.SetTokenEndpointUris("token");
-                //secret registration
-                openIddictServerBuilder.AddDevelopmentEncryptionCertificate()
-                    .AddDevelopmentSigningCertificate();
-                openIddictServerBuilder.DisableAccessTokenEncryption();
-                //the asp request handlers configuration itself
-                openIddictServerBuilder.UseAspNetCore().EnableTokenEndpointPassthrough();
-            });
+    builder.Services
+        .AddOpenIddict()
+        .AddCore(configuration =>
+        {
+            configuration.UseEntityFrameworkCore()
+                .ReplaceWithCustomOAuthEntities()
+                .UseDbContext<ApplicationDbContext>();
+        })
+        .AddServer(openIddictServerBuilder =>
+        {
+            //enable client_credentials grant_tupe support on server level
+            openIddictServerBuilder.AllowClientCredentialsFlow();
+            //specify token endpoint uri
+            openIddictServerBuilder.SetTokenEndpointUris("token");
+            //secret registration
+            openIddictServerBuilder.AddDevelopmentEncryptionCertificate()
+                .AddDevelopmentSigningCertificate();
+            openIddictServerBuilder.DisableAccessTokenEncryption();
+            //the asp request handlers configuration itself
+            openIddictServerBuilder.UseAspNetCore().EnableTokenEndpointPassthrough();
+        });
 
     builder.Services.AddHostedService<ClientSeeder>();
+
+    builder.Services.AddAuthentication(opt =>
+    {
+        opt.DefaultScheme = AppConstant.DefaultScheme;
+        opt.DefaultChallengeScheme = AppConstant.DefaultScheme;
+    })
+    .AddPolicyScheme(AppConstant.DefaultScheme, AppConstant.DefaultScheme, options =>
+    {
+        options.ForwardDefaultSelector = context =>
+        {
+            string authorization = context.Request.Headers[HeaderNames.Authorization];
+            if (!string.IsNullOrEmpty(authorization) && authorization.StartsWith("Bearer "))
+            {
+                var token = authorization.Substring("Bearer ".Length).Trim();
+                var jwtHandler = new JwtSecurityTokenHandler();
+
+                // it's a self contained access token and not encrypted
+                if (jwtHandler.CanReadToken(token))
+                {
+                    var issuer = jwtHandler.ReadJwtToken(token).Issuer;
+                    if (issuer == AppConstant.AuthenticationSchemes.OPEN_ID_DICT)
+                    {
+                        return AppConstant.AuthenticationSchemes.OPEN_ID_DICT;
+                    }
+                    /*
+                    if (issuer == Consts.MY_AUTH0_ISS) // Auth0
+                    {
+                        return Consts.MY_AUTH0_SCHEME;
+                    }
+
+                    if (issuer == Consts.MY_AAD_ISS) // AAD
+                    {
+                        return Consts.MY_AAD_SCHEME;
+                    }
+                    */
+                }
+            }
+
+            // We don't know what it is
+            return AppConstant.AuthenticationSchemes.IDENTITY_APPLICATION;
+        };
+    });
 }
