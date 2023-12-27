@@ -236,6 +236,18 @@ static void ConfigureOpenId(WebApplicationBuilder builder)
                 options.ClientSecret = clientSecret;
         }
     })
+    .AddFacebook(options =>
+    {
+        var appId = builder.Configuration["Authentication:Facebook:AppId"];
+        if (!string.IsNullOrWhiteSpace(appId))
+            options.AppId = appId;
+
+        var appSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
+        if (!string.IsNullOrWhiteSpace(appSecret))
+            options.AppSecret = appSecret;
+
+        options.AccessDeniedPath = "/";
+    })
     .AddPolicyScheme(AppConstant.DefaultScheme, AppConstant.DefaultScheme, options =>
     {
         options.ForwardDefaultSelector = context =>
