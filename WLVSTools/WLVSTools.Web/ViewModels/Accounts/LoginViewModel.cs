@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Authentication;
+using System.ComponentModel.DataAnnotations;
 
 namespace WLVSTools.Web.ViewModels.Accounts
 {
@@ -12,5 +13,11 @@ namespace WLVSTools.Web.ViewModels.Accounts
 
         [Required]
         public bool IsPersistent { get; set; }
+
+        public string? Provider { get; set; }
+
+        public string? ReturnUrl { get; set; }
+
+        public IList<AuthenticationScheme> ExternalLogins { get; set; }
     }
 }

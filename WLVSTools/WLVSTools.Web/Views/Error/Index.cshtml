@@ -1,0 +1,9 @@
+﻿@{
+    Layout = "_LayoutAnonymous";
+    ViewBag.PageTitle = "Error";
+}
+
+<div class="alert alert-danger">
+    <h5><i class="icon fas fa-ban"></i>Error: @ViewBag.ErrorTitle</h5>
+    <p>@ViewBag.ErrorMessage</p>
+</div>
