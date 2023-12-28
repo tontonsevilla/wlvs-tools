@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using HtmlAgilityPack;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WLVSTools.Web.Core.Data.PersonalToolsEntities;
@@ -75,6 +77,39 @@ namespace WLVSTools.Web.Controllers
         public IActionResult ContactList()
         {
             return View();
+        }
+
+        public IActionResult Lotto()
+        {
+            var html = @"https://www.pcso.gov.ph/SearchLottoResult.aspx";
+
+            HtmlWeb web = new HtmlWeb();
+
+            var htmlDoc = web.Load(html);
+
+            var node = htmlDoc.DocumentNode.SelectSingleNode("//*[@id=\"cphContainer_cpContent_GridView1\"]");
+
+            cleanNode(node);
+
+            node.Attributes.Add("class", "table table-striped");
+
+            return View(new HtmlString(node.OuterHtml));
+        }
+
+        private void cleanNode(HtmlNode node)
+        {
+            if (node.HasChildNodes)
+            {
+                foreach (var childNode in node.ChildNodes)
+                {
+                    cleanNode(childNode);
+                    node.Attributes.Remove();
+                }
+            }
+            else
+            {
+                node.Attributes.Remove();
+            }
         }
     }
 }

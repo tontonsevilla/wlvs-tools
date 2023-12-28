@@ -1,0 +1,13 @@
+﻿@using Microsoft.AspNetCore.Html
+
+@model HtmlString
+
+@{
+    ViewBag.PageTitle = "Personal Toolbox - Lotto";
+}
+
+<div class="row">
+    <div class="col-12">
+        @Html.Raw(Model)
+    </div>
+</div>
