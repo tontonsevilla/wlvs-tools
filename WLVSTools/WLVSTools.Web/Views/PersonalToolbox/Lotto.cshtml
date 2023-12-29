@@ -4,7 +4,7 @@
     ViewBag.PageTitle = "Personal Toolbox - Lotto";
 }
 
-<form asp-action="Lotto" method="post">
+<form id="frmLotto" asp-action="Lotto" method="post">
     <div class="row mb-3">
         <div class="col-12 col-md-4">
             <label asp-for="LottoGame">Lotto Game</label>
@@ -163,7 +163,8 @@
     </div>
     <div class="row mb-3">
         <div class="col-12">
-            <button type="submit" class="btn btn-primary">Search Lotto</button>
+            <button id="btnSearchLotto" type="submit" class="btn btn-primary">Search Lotto</button>
+            <button id="btnImportLottoToDB" type="submit" class="btn btn-primary">Import Lotto to DB</button>
         </div>
     </div>
 </form>
@@ -173,3 +174,16 @@
         @Html.Raw(Model.HtmlStringOutput)
     </div>
 </div>
+
+@section Scripts{
+    <script>
+        $(function () {
+            $("#btnImportLottoToDB").on("click", function (e) {
+                e.preventDefault();
+                let frmLotto = $("#frmLotto");
+                frmLotto.attr("action", "ImportLotto");
+                frmLotto.submit();
+            });
+        });
+    </script>
+}

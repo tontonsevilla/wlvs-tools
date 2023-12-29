@@ -12,6 +12,7 @@ using WLVSTools.Web.Core.Models;
 using WLVSTools.Web.Infrastructure.Authentication;
 using WLVSTools.Web.Infrastructure.Authentication.OpenId;
 using WLVSTools.Web.Infrastructure.ExceptionsLogging;
+using WLVSTools.Web.Infrastructure.Lotto;
 using WLVSTools.Web.Infrastructure.PersonalTools;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -97,6 +98,9 @@ static void ConfigureDbContext(WebApplicationBuilder builder)
 
     builder.Services.AddDbContext<ExceptionLoggingDbContext>(options =>
         options.UseSqlite(builder.Configuration.GetConnectionString("ExceptionLoggingConnection")));
+
+    builder.Services.AddDbContext<LottoDbContext>(options =>
+        options.UseSqlite(builder.Configuration.GetConnectionString("LottoConnection")));
 }
 
 static void ConfigureIdentity(WebApplicationBuilder builder)

@@ -10,6 +10,7 @@ using OpenQA.Selenium.Support.UI;
 using WLVSTools.Web.Core.Data.PersonalToolsEntities;
 using WLVSTools.Web.Core.General;
 using WLVSTools.Web.Infrastructure.Authentication;
+using WLVSTools.Web.Infrastructure.Lotto;
 using WLVSTools.Web.Infrastructure.PersonalTools;
 using WLVSTools.Web.ViewModels.PersonalToolbox;
 
@@ -22,16 +23,19 @@ namespace WLVSTools.Web.Controllers
         private readonly IMapper _mapper;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly PersonalToolsDbContext _personalToolsDbContext;
+        private readonly LottoDbContext _lottoDbContext;
 
         public PersonalToolboxController(
             IMapper mapper,
             UserManager<ApplicationUser> userManager,
-            PersonalToolsDbContext personalToolsDbContext) : base(userManager)
+            PersonalToolsDbContext personalToolsDbContext,
+            LottoDbContext lottoDbContext) : base(userManager)
         {
             webDriver = new ChromeDriver();
             _mapper = mapper;
             _userManager = userManager;
             _personalToolsDbContext = personalToolsDbContext;
+            _lottoDbContext = lottoDbContext;
         }
 
         public IActionResult CreateAccount()
@@ -84,49 +88,99 @@ namespace WLVSTools.Web.Controllers
             return View();
         }
 
+        #region LOTTO
         public IActionResult Lotto()
         {
-            return loadLotto(new LottoViewModel());
+            //return loadLotto(new LottoViewModel());
+            return View(new LottoViewModel());
         }
 
         [HttpPost]
         public IActionResult Lotto(LottoViewModel viewModel)
         {
+            IActionResult actionResult = View(viewModel);
+
+            try
+            {
+                viewModel.HasFilter = true;
+                actionResult = loadLotto(viewModel);
+            }
+            catch
+            {
+                ModelState.AddModelError("", "An error occured!");
+            }
+            finally
+            {
+                disposeWebDriver();
+            }
+
+            return actionResult;
+        }
+
+        [HttpPost]
+        public IActionResult ImportLotto(LottoViewModel viewModel)
+        {
             viewModel.HasFilter = true;
-            return loadLotto(viewModel);
+            HtmlDocument htmlDoc = getLottoHtmlDocument(viewModel);
+
+            if (htmlDoc.DocumentNode.HasChildNodes)
+            {
+                var table = htmlDoc.DocumentNode.SelectSingleNode("//*[@id=\"cphContainer_cpContent_GridView1\"]");
+                if (table != null)
+                {
+                    foreach (var row in table.ChildNodes)
+                    {
+
+                    }
+                }
+            }
+
+            return RedirectToAction("Lotto");
         }
 
         private IActionResult loadLotto(LottoViewModel viewModel)
         {
-            getPCSOLottoResultHtmlString(viewModel);
+            HtmlDocument htmlDoc = getLottoHtmlDocument(viewModel);
 
+            if (htmlDoc.DocumentNode.HasChildNodes)
+            {
+                var node = htmlDoc.DocumentNode.SelectSingleNode("//*[@id=\"cphContainer_cpContent_GridView1\"]");
+
+                if (node != null)
+                {
+                    cleanNode(node);
+
+                    node.Attributes.Add("class", "table table-striped");
+
+                    viewModel.HtmlStringOutput = new HtmlString(node.OuterHtml);
+                }
+                else
+                {
+                    viewModel.HtmlStringOutput = new HtmlString("<em>Data not available.</em>");
+                }
+            }
+
+            return View("Lotto", viewModel);
+        }
+
+        private HtmlDocument getLottoHtmlDocument(LottoViewModel viewModel)
+        {
             var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(webDriver.PageSource);
+
+            getPCSOLottoResultHtmlString(viewModel);
 
             while (!htmlDoc.DocumentNode.HasChildNodes)
             {
                 htmlDoc.LoadHtml(webDriver.PageSource);
             }
 
-            disposeWebDriver();
-
-            var node = htmlDoc.DocumentNode.SelectSingleNode("//*[@id=\"cphContainer_cpContent_GridView1\"]");
-
-            cleanNode(node);
-
-            node.Attributes.Add("class", "table table-striped");
-
-            viewModel.HtmlStringOutput = new HtmlString(node.OuterHtml);
-
-            return View("Lotto", viewModel);
+            return htmlDoc;
         }
 
         private void getPCSOLottoResultHtmlString(LottoViewModel viewModel)
         {
             var wait = new WebDriverWait(webDriver, TimeSpan.FromSeconds(5));
             webDriver.Navigate().GoToUrl(@"https://www.pcso.gov.ph/SearchLottoResult.aspx");
-
-            var html = webDriver.FindElement(By.TagName("html"), 5);
 
             var elementSelectGame = webDriver.FindElement(By.Id("cphContainer_cpContent_ddlSelectGame"), 5);
             var ddlSelectGame = new SelectElement(elementSelectGame);
@@ -189,5 +243,6 @@ namespace WLVSTools.Web.Controllers
                 }
             }
         }
+        #endregion LOTTO
     }
 }
