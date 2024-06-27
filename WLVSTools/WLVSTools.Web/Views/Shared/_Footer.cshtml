@@ -1,0 +1,16 @@
+﻿@{ 
+    var startYear = 2024;
+    var currentYear = DateTime.Now.Year;
+    var startToCurrentYear = $"{currentYear}";
+
+    if (currentYear > startYear)
+    {
+        startToCurrentYear = $"{startYear}-{currentYear}";
+    }
+}
+<footer class="main-footer">
+    <div class="float-right d-none d-sm-block">
+        <b>Version</b> 3.2.0
+    </div>
+    <strong>WLVS Tools &copy; @startToCurrentYear Powered by <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+</footer>

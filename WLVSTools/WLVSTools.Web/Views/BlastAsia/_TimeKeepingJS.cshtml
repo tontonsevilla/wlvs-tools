@@ -1,0 +1,13 @@
+﻿<script>
+    $(function () {
+        $("#btnSend").on("click", function () {
+            let mailTo = "mailto:" + $("#Recipient").val() +
+                "?cc=" + $("#CCRecipient").val() +
+                "&subject=" + $("#Subject").val();
+
+            navigator.clipboard.writeText($("#Body").val());
+
+            window.location.href = mailTo;
+        });
+    });
+</script>
