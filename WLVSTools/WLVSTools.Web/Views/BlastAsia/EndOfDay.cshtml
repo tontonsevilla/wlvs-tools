@@ -1,0 +1,69 @@
+﻿@model WLVSTools.Web.Models.BlastAsia.EndOfDay
+
+@{
+    ViewBag.Title = "Blast Asia - End of Day";
+}
+
+@using (Html.BeginForm("EndOfDay", "BlastAsia", FormMethod.Post))
+{
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">Steer Account</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Email)
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Email)
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Password)
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Password)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">End of Day - Items</h3>
+            <button type="button" id="btnAddItems" class="btn btn-primary fa-pull-right"><i class="fa fa-plus"></i></button>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Subject)
+                @Html.TextBoxFor(m => m.Subject, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Subject)
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.EODDate)
+                        @*@Html.Dat(m => m.EODDate, new { @class = "form-control" })*@
+                        @Html.ValidationMessageFor(m => m.EODDate)
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.EODAccount)
+                        @Html.TextBoxFor(m => m.EODAccount, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.EODAccount)
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped">
+                <thead>
+
+                </thead>
+            </table>
+        </div>
+        <div class="card-footer">
+            <button type="submit" id="btnSubmit" class="btn btn-success fa-pull-right">Submit</button>
+        </div>
+    </div>
+}
