@@ -7,6 +7,7 @@ using System.Net;
 using WLVSTools.Web.WebInfrastructure.Extensions;
 using Microsoft.Extensions.Options;
 using WLVSTools.Web.WebInfrastructure.Selenium;
+using WLVSTools.Web.WebInfrastructure.Selenium.Automation;
 
 namespace WLVSTools.Web.Services
 {
@@ -52,58 +53,11 @@ namespace WLVSTools.Web.Services
             sb.AppendFormat("{0}={1}&", name, encodedValue);
         }
 
-        public string GenerateCompanyName(string keyword, string quantity)
+        public string GenerateCompanyName()
         {
-            const int maxTimeInSecondsToFindElement = 60;
-            var chromeOptions = new ChromeOptionsWithPrefs();
-            var defaultSettings = new Dictionary<string, object>();
-            defaultSettings.Add("images", 2);
-            chromeOptions.Prefs.Add("profile.default_content_settings", defaultSettings);
-            chromeOptions.AddArguments("headless");
-
-            IWebDriver driver = new ChromeDriver(@"C:\WebDrivers", chromeOptions);
-            string pageSource = "";
-
-            try
-            {
-                driver.Navigate().GoToUrl("https://www.coolgenerator.com/company-name-generator");
-                var clickGenerate = false;
-
-                if (!string.IsNullOrWhiteSpace(keyword))
-                {
-                    var keywordTextBox = driver.FindElement(By.Name("keyword"), maxTimeInSecondsToFindElement);
-                    keywordTextBox.SendKeysCustom(keyword);
-                    clickGenerate = true;
-                }
-
-                if (!string.IsNullOrWhiteSpace(quantity))
-                {
-                    var quantityTextBox = driver.FindElement(By.Name("quantity"), maxTimeInSecondsToFindElement);
-                    quantityTextBox.SendKeysCustom(quantity);
-                    clickGenerate= true;
-                }
-
-                if (clickGenerate)
-                {
-                    var generateButton = driver.FindElement(By.XPath("//button[.='Generate']"), maxTimeInSecondsToFindElement);
-                    generateButton.Click();
-
-                    driver.FindElement(By.ClassName("content-list"), maxTimeInSecondsToFindElement);
-                }
-
-                pageSource = driver.PageSource;
-            }
-            catch 
-            {
-                throw;
-            }
-            finally
-            {
-                driver.Close();
-                driver.Dispose();
-            }
-
-            return pageSource;
+            var seleniumManager = new WebInfrastructure.Managers.SeleniumManager();
+            var companyNameGeneration = new CompanyNameGenerationAutomation();
+            return seleniumManager.WebScrape(companyNameGeneration);
         }
 
         public string GenerateEIN()

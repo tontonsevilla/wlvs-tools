@@ -21,9 +21,9 @@ namespace WLVSTools.Web.Controllers.api
         }
 
         [HttpGet]
-        public IActionResult CompanyName(string keyword = "", string quantity = "") 
+        public IActionResult CompanyName() 
         {
-            var htmlString = _generatorService.GenerateCompanyName(keyword, quantity);
+            var htmlString = _generatorService.GenerateCompanyName();
             var htmlDoc = new HtmlDocument();
 
             htmlDoc.LoadHtml(htmlString);
