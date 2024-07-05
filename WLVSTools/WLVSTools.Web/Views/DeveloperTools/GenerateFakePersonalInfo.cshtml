@@ -18,6 +18,29 @@
 
 @if (Model != null)
 {
+    @section Styles{ 
+        <style>
+            pre {
+                background-color: ghostwhite;
+                border: 1px solid silver;
+                padding: 10px 20px;
+                margin: 20px;
+            }
+
+            .json-key {
+                color: brown;
+            }
+
+            .json-value {
+                color: navy;
+            }
+
+            .json-string {
+                color: olive;
+            }
+        </style>
+    }
+
     @section Scripts{ 
         <script>
             $(function () {
@@ -25,9 +48,35 @@
                     url: "/api/Generate/Personalinfo?country=@Model.Country&state=@Model.State",
                     dataType: "json"
                 }).done(function (data) {
-                    $('#resultContainer').append(JSON.stringify(data, undefined, 2));
+                    $('#resultContainer').html(prettyPrint(data));
+
+                    $(".btn-copy").off("click").on("click", function () {
+                        let value = $(this).parent().text().replace(/["']/g, "");
+                        navigator.clipboard.writeText(value);
+                        toastr.success("Copy '" + value + "'", "Successful");
+                    });
                 });
             });
+
+            function replacer (match, pIndent, pKey, pVal, pEnd) {
+                var key = '<span class=json-key>';
+                var val = '<span class=json-value>';
+                var str = '<span class=json-string>';
+                var r = pIndent || '';
+                if (pKey)
+                    r = r + key + pKey.replace(/[": ]/g, '') + '</span>: ';
+                if (pVal)
+                    r = r + (pVal[0] == '"' ? str : val) + pVal + '<button type="button" class="btn-copy btn btn-xs btn-success ml-1"><i class="fas fa-copy"></i></button></span>';
+                return r + (pEnd || '');
+            }
+
+            function prettyPrint(obj) {
+                var jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg;
+                return JSON.stringify(obj, null, 3)
+                    .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
+                    .replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                    .replace(jsonLine, replacer);
+            }
         </script>
     }
 }
