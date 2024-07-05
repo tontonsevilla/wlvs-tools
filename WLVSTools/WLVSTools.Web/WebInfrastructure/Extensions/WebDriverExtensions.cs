@@ -14,5 +14,12 @@ namespace WLVSTools.Web.WebInfrastructure.Extensions
             }
             return driver.FindElement(by);
         }
+
+        public static void SendKeysCustom(this IWebElement element, string value)
+        {
+            element.Click();
+            element.Clear();
+            element.SendKeys(value);
+        }
     }
 }

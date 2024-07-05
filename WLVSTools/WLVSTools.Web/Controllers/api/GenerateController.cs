@@ -21,10 +21,9 @@ namespace WLVSTools.Web.Controllers.api
         }
 
         [HttpGet]
-        public async Task<IActionResult> CompanyName(string keyword = "", string quantity = "") 
+        public IActionResult CompanyName(string keyword = "", string quantity = "") 
         {
-            var responseGenerateCompanyName = await _generatorService.GenerateCompanyName(keyword, quantity);
-            var htmlString = await responseGenerateCompanyName.Content.ReadAsStringAsync();
+            var htmlString = _generatorService.GenerateCompanyName(keyword, quantity);
             var htmlDoc = new HtmlDocument();
 
             htmlDoc.LoadHtml(htmlString);
