@@ -1,12 +1,5 @@
-﻿using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
-using OpenQA.Selenium;
-using System.Text;
+﻿using System.Text;
 using System.Web;
-using System.Net;
-using WLVSTools.Web.WebInfrastructure.Extensions;
-using Microsoft.Extensions.Options;
-using WLVSTools.Web.WebInfrastructure.Selenium;
 using WLVSTools.Web.WebInfrastructure.Selenium.Automation;
 
 namespace WLVSTools.Web.Services
@@ -21,36 +14,9 @@ namespace WLVSTools.Web.Services
 
         public string GeneratePersonalInfo(string countryCode, string state)
         {
-            ChromeOptions options = new ChromeOptions();
-            options.AddArguments("headless");
-
-            IWebDriver driver = new ChromeDriver(@"C:\WebDrivers");
-            driver.Url = "https://www.coolgenerator.com/fake-name-generator";
-
-            var pageSourceBefore = driver.PageSource;
-
-            SelectElement ddlState = new SelectElement(driver.FindElement(By.Name("state")));
-            ddlState.SelectByValue(state);
-
-            IWebElement btnGenerate = driver.FindElement(By.XPath("//button[.='Generate']"));
-            btnGenerate.Click();
-
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(120));
-
-            wait.Until(drv => drv.FindElement(By.XPath("//b[.='Basic information']")));
-
-            var htmlString = driver.PageSource;
-
-            driver.Quit();
-            driver.Dispose();
-
-            return htmlString;
-        }
-
-        protected void AppendParameter(StringBuilder sb, string name, string value)
-        {
-            string encodedValue = HttpUtility.UrlEncode(value);
-            sb.AppendFormat("{0}={1}&", name, encodedValue);
+            var seleniumManager = new WebInfrastructure.Managers.SeleniumManager();
+            var personalInformationGenerationAutomation = new PersonalInformationGenerationAutomation(countryCode, state);
+            return seleniumManager.WebScrape(personalInformationGenerationAutomation);
         }
 
         public string GenerateCompanyName()

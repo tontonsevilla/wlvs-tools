@@ -1,6 +1,5 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using WLVSTools.Web.WebInfrastructure.Selenium;
 using WLVSTools.Web.WebInfrastructure.Selenium.Interfaces;
 
 namespace WLVSTools.Web.WebInfrastructure.Managers
@@ -8,7 +7,7 @@ namespace WLVSTools.Web.WebInfrastructure.Managers
     public class SeleniumManager
     {
         const int maxmaxTimeInSecondsToFindElement = 60;
-        ChromeOptionsWithPrefs options = new ChromeOptionsWithPrefs();
+        ChromeOptions options = new ChromeOptions();
         IWebDriver webDriver;
 
         public SeleniumManager()
@@ -19,9 +18,7 @@ namespace WLVSTools.Web.WebInfrastructure.Managers
 
         private void setOptions()
         {
-            var defaultSettings = new Dictionary<string, object>();
-            defaultSettings.Add("images", 2);
-            options.Prefs.Add("profile.default_content_settings", defaultSettings);
+            options.PageLoadStrategy = PageLoadStrategy.Eager;
             options.AddArguments("headless");
         }
 
