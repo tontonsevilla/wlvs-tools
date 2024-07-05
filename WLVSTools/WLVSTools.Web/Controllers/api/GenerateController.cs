@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics.Metrics;
 using System.Globalization;
 using System.Web;
+using WLVSTools.Web.Models.DeveloperTools;
 using WLVSTools.Web.Models.Generate;
 using WLVSTools.Web.Services;
 
@@ -18,10 +19,10 @@ namespace WLVSTools.Web.Controllers.api
         }
 
         [HttpGet]
-        public IActionResult PersonalInfo(string country, string state) 
+        public IActionResult PersonalInfo(GenerateFakePersonalInfo data) 
         {
-            var countryCode = getFakeNameGeneratorCountry(country);
-            var htmlString = _generatorService.GeneratePersonalInfo(countryCode, state);
+            var countryCode = getFakeNameGeneratorCountry(data.Country);
+            var htmlString = _generatorService.GeneratePersonalInfo(countryCode, data.State);
             var htmlDoc = new HtmlDocument();
 
             htmlDoc.LoadHtml(htmlString);
@@ -30,7 +31,7 @@ namespace WLVSTools.Web.Controllers.api
             var basicInformatioNode = nodes.Where(n => n.InnerText.Contains("Basic information")).FirstOrDefault();
             HtmlNode tableBasicInformation = basicInformatioNode.ChildNodes[1].ChildNodes[0];
 
-            if (!string.IsNullOrWhiteSpace(state))
+            if (!string.IsNullOrWhiteSpace(data.State))
             {
                 tableBasicInformation = basicInformatioNode.ChildNodes[2].ChildNodes[0];
             }
@@ -38,11 +39,11 @@ namespace WLVSTools.Web.Controllers.api
             var fullName = tableBasicInformation.ChildNodes[1].ChildNodes[1].InnerText.Replace("&nbsp;", " ");
             var gender = tableBasicInformation.ChildNodes[4].ChildNodes[1].InnerText;
             var email = normalizedCharacters($"tonton.blast+{fullName.Replace(" ", "")}@gmail.com");
-            var sevisCountry = getSevisCountry(country);
+            var sevisCountry = getSevisCountry(data.Country);
 
             if (countryCode != "uk-")
             {
-                state = tableBasicInformation.ChildNodes.Where(n =>
+                data.State = tableBasicInformation.ChildNodes.Where(n =>
                                                     n.InnerText.IndexOf("State(area/province)", System.StringComparison.OrdinalIgnoreCase) >= 0)
                 .First().ChildNodes[1].SelectNodes("small")[0].InnerText.Split(' ')[1].Replace(")", "");
             }
@@ -57,7 +58,7 @@ namespace WLVSTools.Web.Controllers.api
                                                  n.InnerText.IndexOf("City", System.StringComparison.OrdinalIgnoreCase) >= 0)
                 .First().ChildNodes[1].InnerText.Replace("&nbsp;", " "),
 
-                State = state,
+                State = data.State,
 
                 PostalCode = tableBasicInformation.ChildNodes.Where(n =>
                                                        n.InnerText.IndexOf("Zipcode", System.StringComparison.OrdinalIgnoreCase) >= 0)

@@ -25,8 +25,9 @@ namespace WLVSTools.Web.WebInfrastructure.Selenium.Automation
             if (string.IsNullOrWhiteSpace(CountryCode)
                 && !string.IsNullOrWhiteSpace(State))
             {
-                SelectElement ddlState = new SelectElement(WebDriver.FindElement(By.Name("state"), maxTimeInSecondsToFindElement));
-                ddlState.SelectByValue(State);
+                var ddlStateElement = WebDriver.FindElement(By.Name("state"), maxTimeInSecondsToFindElement);
+                ddlStateElement.Click();
+                ddlStateElement.FindElement(By.XPath($"option[@value='{State}']")).Click();
 
                 IWebElement btnGenerate = WebDriver.FindElement(By.XPath("//button[.='Generate']"), maxTimeInSecondsToFindElement);
                 btnGenerate.Click();

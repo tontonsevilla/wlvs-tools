@@ -6,12 +6,13 @@
     <title>WLVS Tools | @ViewBag.Title</title>
 
     <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="/plugins/pace-progress/themes/black/pace-theme-flat-top.css">
     <link rel="stylesheet" href="/ui-framework/admin-lte-3.2.0/css/adminlte.min.css">
     <link rel="stylesheet" href="/css/style.css">
 
     @RenderSection("Styles", false)
 </head>
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-fixed pace-primary">
     <!-- Site wrapper -->
     <div class="wrapper">
         <partial name="_NavBar" />
@@ -56,6 +57,7 @@
 
     <script src="/plugins/jquery/jquery.min.js"></script>
     <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/plugins/pace-progress/pace.min.js"></script>
     <script src="/ui-framework/admin-lte-3.2.0/js/adminlte.min.js"></script>
     @RenderSection("Scripts", false)
 </body>
