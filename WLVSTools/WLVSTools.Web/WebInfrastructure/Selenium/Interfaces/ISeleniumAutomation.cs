@@ -5,7 +5,7 @@ namespace WLVSTools.Web.WebInfrastructure.Selenium.Interfaces
     public interface ISeleniumAutomation
     {
         IWebDriver WebDriver { get; set; }
-        void Execute();
+        void Execute(int maxTimeInSecondsToFindElement = 60);
     }
 
     public interface ISeleniumAutomationWebScrape

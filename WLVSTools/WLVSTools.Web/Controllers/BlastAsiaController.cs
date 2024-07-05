@@ -5,6 +5,7 @@ using WLVSTools.Web.Models.BlastAsia;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using WLVSTools.Web.WebInfrastructure.Extensions;
+using WLVSTools.Web.WebInfrastructure.Selenium.Automation.BlastAsia;
 
 namespace WLVSTools.Web.Controllers
 {
@@ -47,21 +48,9 @@ namespace WLVSTools.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                const int maxTimeInSecondsToFindElement = 60;
-                IWebDriver driver = new ChromeDriver();
-                driver.Navigate().GoToUrl("https://live.quickreach.co/");
-
-                //LOGIN
-                driver.FindElement(By.Id("inputEmail1"), maxTimeInSecondsToFindElement).SendKeys(model.Email);
-                driver.FindElement(By.Id("inputPassword")).SendKeys(model.Password);
-                driver.FindElement(By.CssSelector("button[data-cy='lg-submit-btn']")).Click();
-
-                //CREATE REQUEST
-                driver.FindElement(By.CssSelector("button[mattooltip='File New Request']"), maxTimeInSecondsToFindElement).Click();
-                driver.FindElement(By.XPath("//*[@id=\"mat-dialog-0\"]/app-workflow-selection-wizard/section/div[2]/div/div[3]/section[2]/div/div/mat-card[4]"), maxTimeInSecondsToFindElement).Click();
-
-                driver.Close();
-                driver.Dispose();
+                var seleniumManager = new WebInfrastructure.Managers.SeleniumManager();
+                var eodSubmissionAutomation = new EODSubmissionAutomation(model);
+                seleniumManager.Execute(eodSubmissionAutomation);
             }
 
             return View(model);

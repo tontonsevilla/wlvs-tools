@@ -22,7 +22,7 @@
                 <div class="col-sm-12 col-md-6">
                     <div class="form-group">
                         @Html.LabelFor(m => m.Password)
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @type = "password" })
                         @Html.ValidationMessageFor(m => m.Password)
                     </div>
                 </div>
@@ -45,6 +45,7 @@
                     <div class="form-group">
                         @Html.LabelFor(m => m.EODDate)
                         @*@Html.Dat(m => m.EODDate, new { @class = "form-control" })*@
+                        @Html.TextBoxFor(m => m.EODDate, new { @class = "form-control", @type = "date" })
                         @Html.ValidationMessageFor(m => m.EODDate)
                     </div>
                 </div>
