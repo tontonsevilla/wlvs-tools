@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using System.Collections.Generic;
 using WLVSTools.Web.WebInfrastructure.Selenium.Interfaces;
 
 namespace WLVSTools.Web.WebInfrastructure.Managers
@@ -19,13 +20,25 @@ namespace WLVSTools.Web.WebInfrastructure.Managers
         private void setOptions()
         {
             options.PageLoadStrategy = PageLoadStrategy.Eager;
-            //options.AddArguments("headless");
+            options.AddArguments("headless");
         }
 
         public void Execute(ISeleniumAutomation seleniumAutomation)
         {
-            seleniumAutomation.WebDriver = webDriver;
-            seleniumAutomation.Execute();
+            try
+            {
+                seleniumAutomation.WebDriver = webDriver;
+                seleniumAutomation.Execute();
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                seleniumAutomation.WebDriver.Close();
+                seleniumAutomation.WebDriver.Dispose();
+            }
         }
 
         public string WebScrape(ISeleniumAutomationWebScrape seleniumAutomationWebScrape)

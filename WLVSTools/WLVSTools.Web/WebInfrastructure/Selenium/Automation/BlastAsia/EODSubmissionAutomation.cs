@@ -25,7 +25,7 @@ namespace WLVSTools.Web.WebInfrastructure.Selenium.Automation.BlastAsia
             WebDriver.FindElement(By.CssSelector("button[data-cy='lg-submit-btn']")).Click();
 
             //CREATE REQUEST
-            WebDriver.FindElement(By.CssSelector("button[mattooltip='File New Request']"), maxTimeInSecondsToFindElement).Click();
+            WebDriver.FindElementClickable(By.CssSelector("button[mattooltip='File New Request']"), maxTimeInSecondsToFindElement).Click();
             if (WebDriver.SpinnerChecker(By.Id("spinner"), maxTimeInSecondsToFindElement))
             {
                 WebDriver.FindElement(By.XPath("//*[@id=\"mat-dialog-0\"]/app-workflow-selection-wizard/section/div[2]/div/div[3]/section[2]/div/div/mat-card[4]"), maxTimeInSecondsToFindElement).Click();
