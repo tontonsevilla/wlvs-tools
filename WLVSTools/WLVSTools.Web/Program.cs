@@ -1,3 +1,6 @@
+using Microsoft.Extensions.FileProviders;
+using System.Reflection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 //Add Services to the Container
@@ -16,7 +19,17 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();   
+//app.UseStaticFiles();   
+// get the directory
+var assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+var assetDirectory = Path.Combine(assemblyDirectory, "Resources");
+
+// use it
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(assetDirectory),
+    RequestPath = "/Resources"
+});
 
 app.UseRouting();
 
