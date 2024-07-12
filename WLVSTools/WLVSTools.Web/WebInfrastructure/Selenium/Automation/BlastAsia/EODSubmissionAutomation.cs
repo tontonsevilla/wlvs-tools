@@ -26,9 +26,22 @@ namespace WLVSTools.Web.WebInfrastructure.Selenium.Automation.BlastAsia
 
             //CREATE REQUEST
             WebDriver.FindElementClickable(By.CssSelector("button[mattooltip='File New Request']"), maxTimeInSecondsToFindElement).Click();
-            if (WebDriver.SpinnerChecker(By.Id("spinner"), maxTimeInSecondsToFindElement))
+            if (WebDriver.IsSpinnerVisible(By.Id("spinner"), maxTimeInSecondsToFindElement))
             {
                 WebDriver.FindElement(By.XPath("//*[@id=\"mat-dialog-0\"]/app-workflow-selection-wizard/section/div[2]/div/div[3]/section[2]/div/div/mat-card[4]"), maxTimeInSecondsToFindElement).Click();
+
+                if (WebDriver.IsSpinnerVisible(By.Id("spinner"), maxTimeInSecondsToFindElement))
+                {
+                    WebDriver.FindElement(By.CssSelector("input[placeholder='Subject']"), maxTimeInSecondsToFindElement).SendKeysCustom(Data.Subject);
+                    WebDriver.FindElementClickable(By.CssSelector("mat-datepicker-toggle[data-cy='datepicker-toggle-EODDate']"), maxTimeInSecondsToFindElement).Click();
+                    WebDriver.FindElementClickable(By.CssSelector($"td[class*='mat-calendar-body-cell'][aria-label='{Data.EODDate?.ToString("dd-MM-yyyy")}']"), maxTimeInSecondsToFindElement).Click();
+                    WebDriver.FindElementClickable(By.XPath("//mat-label[contains(text(),'Account')]/ancestor::mat-form-field"), maxTimeInSecondsToFindElement).Click();
+                    WebDriver.FindElementClickable(By.CssSelector($"mat-option[data-cy='{Data.EODAccount}']"), maxTimeInSecondsToFindElement).Click();
+
+                    //ADD ITEM
+                    WebDriver.FindElementClickable(By.XPath("//span[@mattooltip='Add New Record']/ancestor::button"), maxTimeInSecondsToFindElement).Click();
+                    //WebDriver.FindElement(By.CssSelector("textarea[data-cy='DescriptionEOD']"), maxTimeInSecondsToFindElement).SendKeysCustom(Data.eo);
+                }
             }            
         }
     }

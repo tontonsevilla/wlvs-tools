@@ -21,7 +21,7 @@ namespace WLVSTools.Web.WebInfrastructure.Extensions
             return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(by));
         }
 
-        public static bool SpinnerChecker(this IWebDriver driver, By by, int timeoutInSeconds)
+        public static bool IsSpinnerVisible(this IWebDriver driver, By by, int timeoutInSeconds)
         {
             var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeoutInSeconds));
             return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.InvisibilityOfElementLocated(by));
