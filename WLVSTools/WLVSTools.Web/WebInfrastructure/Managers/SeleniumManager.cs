@@ -20,7 +20,7 @@ namespace WLVSTools.Web.WebInfrastructure.Managers
         private void setOptions()
         {
             options.PageLoadStrategy = PageLoadStrategy.Eager;
-            options.AddArguments("headless");
+            //options.AddArguments("headless");
         }
 
         public void Execute(ISeleniumAutomation seleniumAutomation)

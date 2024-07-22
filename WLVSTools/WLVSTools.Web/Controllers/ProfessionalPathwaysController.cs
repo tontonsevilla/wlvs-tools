@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OpenQA.Selenium;
 using WLVSTools.Web.Models.AIFS;
+using WLVSTools.Web.WebInfrastructure.Selenium.Automation.AIFS.ProfessionalPathways;
+using WLVSTools.Web.WebInfrastructure.Selenium.Interfaces;
 
 namespace WLVSTools.Web.Controllers
 {
@@ -19,6 +22,14 @@ namespace WLVSTools.Web.Controllers
         [HttpPost]
         public IActionResult HostRegistration(ProfessionalPathwaysRegistration viewModel)
         {
+            if (ModelState.IsValid)
+            {
+                var manager = new WebInfrastructure.Managers.SeleniumManager();
+                ISeleniumAutomation hostRegistrationAutomation = new HostRegistrationAutomation(viewModel);
+
+                manager.Execute(hostRegistrationAutomation);
+            }
+
             return View(viewModel);
         }
     }

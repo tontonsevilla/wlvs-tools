@@ -3,7 +3,7 @@ using WLVSTools.Web.WebInfrastructure.Extensions;
 
 namespace WLVSTools.Web.WebInfrastructure.Attrbutes.Validations
 {
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
     public class RequiredIfAttribute : ValidationAttribute
     {
         public string PropertyToCheck { get; set; }
@@ -16,14 +16,14 @@ namespace WLVSTools.Web.WebInfrastructure.Attrbutes.Validations
             var property = validationContext.ObjectType.GetProperty(PropertyToCheck);
             var comparerValue = property.GetValue(validationContext.ObjectInstance, null);
 
-            if (comparerValue.ToSafeString() != ""
-                && comparerValue.ToSafeString() == ValueToCheck.ToSafeString() 
+            if (comparerValue.ToSafeString() == ValueToCheck.ToSafeString() 
                 && (value == null || value.ToSafeString() == ""))
             {
                 var members = new List<string>
                 {
                     validationContext.MemberName
                 };
+
                 return new ValidationResult(ErrorMessage ?? defaultErrorMsg, members);
             }
 
