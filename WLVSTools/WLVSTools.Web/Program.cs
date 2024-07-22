@@ -28,7 +28,7 @@ var assetDirectory = Path.Combine(assemblyDirectory, "Resources");
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(assetDirectory),
-    RequestPath = "/Resources"
+    //RequestPath = "/Resources"
 });
 
 app.UseRouting();
@@ -38,6 +38,9 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "api",
     pattern: "api/{controller}/{action}/{id?}");
+app.MapControllerRoute(
+    name: "customarea",
+    pattern: "{area:exists}/{controller}/{action}/{id?}");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=index}/{id?}");

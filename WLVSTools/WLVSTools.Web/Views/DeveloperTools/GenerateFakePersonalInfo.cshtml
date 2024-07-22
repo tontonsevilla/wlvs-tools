@@ -4,17 +4,25 @@
     ViewBag.Title = "Generate Fake Personal Info";
 }
 
-<form asp-action="GenerateFakePersonalInfo" asp-controller="DeveloperTools" method="get">
-    <div class="form-group">
-        @Html.TextBoxFor(m => m.Country, new { @class = "form-control", @placeholder = "Country" })
-    </div>
-    <div class="form-group">
-        @Html.TextBoxFor(m => m.State, new { @class = "form-control", @placeholder = "State" })
-    </div>
-    <button type="submit" class="btn btn-primary">Generate</button>
-</form>
+<div class="card">
+    <form asp-action="GenerateFakePersonalInfo" asp-controller="DeveloperTools" method="get">
+        <div class="card-body">
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.Country, new { @class = "form-control", @placeholder = "Country" })
+            </div>
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.State, new { @class = "form-control", @placeholder = "State" })
+            </div>
+            <button type="submit" class="btn btn-primary fa-pull-right">Generate</button>
+        </div>
+    </form>
+</div>
 
-<pre><code id="resultContainer"></code></pre>
+<div class="card">
+    <div class="card-body">
+        <pre><code id="resultContainer"></code></pre>
+    </div>
+</div>
 
 @if (Model != null)
 {
