@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-sm-12 col-md-4">
                     @Html.LabelFor(m => m.State)
-                    @Html.TextBoxFor(m => m.State, new { @class = "form-control" })
+                    @Html.DropDownListFor(m => m.State, Model.StateList, null, new { @class = "form-control" })
                     @Html.ValidationMessageFor(m => m.State)
                 </div>
             </div>

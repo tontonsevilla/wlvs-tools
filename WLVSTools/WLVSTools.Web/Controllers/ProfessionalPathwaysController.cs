@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using OpenQA.Selenium;
 using WLVSTools.Web.ApplicationServices;
 using WLVSTools.Web.Models.AIFS;
@@ -11,17 +12,22 @@ namespace WLVSTools.Web.Controllers
     public class ProfessionalPathwaysController : Controller
     {
         private readonly GenerateApplicationViewService _generateApplicationViewService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProfessionalPathwaysController(GenerateApplicationViewService generateApplicationViewService)
+        public ProfessionalPathwaysController(
+            GenerateApplicationViewService generateApplicationViewService,
+            IWebHostEnvironment webHostEnvironment)
         {
             _generateApplicationViewService = generateApplicationViewService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult HostRegistration(string type)
         {
             var viewModel = new ProfessionalPathwaysRegistration
             {
-                Type = type
+                Type = type,
+                WebHostEnvironment = _webHostEnvironment
             };
 
             return View(viewModel);
@@ -43,6 +49,10 @@ namespace WLVSTools.Web.Controllers
 
                 manager.Execute(hostRegistrationAutomation);
             }
+
+            viewModel.RunEndDateTime = DateTime.Now;
+
+            ViewBag.TotalRunTime = viewModel.TotalRunTimeInSeconds;
 
             return View(viewModel);
         }

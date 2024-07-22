@@ -5,7 +5,7 @@ using WLVSTools.Web.WebInfrastructure.Attrbutes.Validations;
 
 namespace WLVSTools.Web.Models.AIFS
 {
-    public class ProfessionalPathwaysRegistration
+    public class ProfessionalPathwaysRegistration : BaseModel
     {
         [Required]
         public string? Type { get; set; }
