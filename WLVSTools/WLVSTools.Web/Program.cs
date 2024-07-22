@@ -1,9 +1,11 @@
 using Microsoft.Extensions.FileProviders;
 using System.Reflection;
+using WLVSTools.Web.WebInfrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //Add Services to the Container
+builder.Services.AddApplicationServices();
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers();
 
