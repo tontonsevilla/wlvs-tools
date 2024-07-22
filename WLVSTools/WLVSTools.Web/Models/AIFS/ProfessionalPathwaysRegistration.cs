@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
+using WLVSTools.Web.Models.DeveloperTools;
 using WLVSTools.Web.WebInfrastructure.Attrbutes.Validations;
 
 namespace WLVSTools.Web.Models.AIFS
@@ -16,7 +17,7 @@ namespace WLVSTools.Web.Models.AIFS
         public string? State { get; set; }
 
         [Required]
-        public string? Url { get; set; } = "http://localhost/Host/Account/Registration";
+        public string? Url { get; set; } = "http://localhost/Host/Account/Register";
 
         public List<SelectListItem> TypeList
         {
@@ -50,5 +51,7 @@ namespace WLVSTools.Web.Models.AIFS
                 }.OrderBy(m => m.Value).ToList();
             }
         }
+
+        public Personalnfo? Personalnfo { get; set; }
     }
 }

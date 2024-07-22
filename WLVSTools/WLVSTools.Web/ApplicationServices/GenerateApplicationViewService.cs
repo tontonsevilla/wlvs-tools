@@ -16,7 +16,7 @@ namespace WLVSTools.Web.ApplicationServices
             _generatorService = new GeneratorService();
         }
 
-        public dynamic PersonalInfo(GenerateFakePersonalInfo data)
+        public Personalnfo PersonalInfo(GenerateFakePersonalInfo data)
         {
             var countryCode = getFakeNameGeneratorCountry(data.Country);
             var htmlString = _generatorService.GeneratePersonalInfo(countryCode, data.State);
@@ -45,7 +45,7 @@ namespace WLVSTools.Web.ApplicationServices
                 .First().ChildNodes[1].SelectNodes("small")[0].InnerText.Split(' ')[1].Replace(")", "");
             }
 
-            var address = new
+            var address = new Address
             {
                 Address1 = tableBasicInformation.ChildNodes.Where(n =>
                                                      n.InnerText.IndexOf("Street address", System.StringComparison.OrdinalIgnoreCase) >= 0)
@@ -68,14 +68,14 @@ namespace WLVSTools.Web.ApplicationServices
 
             var company = Company();
 
-            var personData = new
+            var personData = new Personalnfo
             {
                 FirstName = $"{fullName.Split(' ')[0]} Test Data",
                 LastName = fullName.Split(' ')[1],
                 Gender = gender,
                 Email = email,
                 Address = address,
-                UserInfo = new
+                UserInfo = new UserInfo
                 {
                     UserName = email,
                     Password = "P@ssw0rd"

@@ -6,10 +6,10 @@ namespace WLVSTools.Web.Models.DeveloperTools
     public class GenerateFakePersonalInfo
     {
         [Required]
-        public string Country { get; set; }
+        public string? Country { get; set; }
 
         [RequiredIf(PropertyToCheck = "Country", ValueToCheck = "United States")]
-        public string State { get; set; }
+        public string? State { get; set; }
 
         public bool HasData { get; set; }
     }
