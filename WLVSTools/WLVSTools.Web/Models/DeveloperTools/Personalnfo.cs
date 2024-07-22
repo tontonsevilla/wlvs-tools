@@ -8,6 +8,7 @@ namespace WLVSTools.Web.Models.DeveloperTools
         public string LastName { get; set; }
         public string Gender { get; set; }
         public string Email { get; set; }
+        public string Title { get; set; } = "Attorney";
         public string Phone { get; set; } = "1234567890";
         public string Password { get; set; } = "P@ssw0rd";
         public Address Address { get; set; }

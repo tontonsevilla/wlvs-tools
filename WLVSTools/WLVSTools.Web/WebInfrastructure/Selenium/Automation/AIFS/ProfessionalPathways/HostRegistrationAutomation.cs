@@ -24,11 +24,11 @@ namespace WLVSTools.Web.WebInfrastructure.Selenium.Automation.AIFS.ProfessionalP
 
             if (Data.Type?.ToUpper() == "CONTACT")
             {
-                WebDriver.FindElement(By.CssSelector(".rdbApplicantType[value='Host']"), maxTimeInSecondsToFindElement).Click();
+                WebDriver.FindElement(By.XPath("//input[@value='Host' and @class='rdbApplicantType']"), maxTimeInSecondsToFindElement).Click();
             }
             else if (Data.Type?.ToUpper() == "THIRDPARTY")
             {
-                WebDriver.FindElement(By.CssSelector(".rdbApplicantType[value='Third Party']"), maxTimeInSecondsToFindElement).Click();
+                WebDriver.FindElement(By.XPath("//input[@value='Third Party' and @class='rdbApplicantType']"), maxTimeInSecondsToFindElement).Click();
                 isThirdParty = true;
             }
             else
@@ -38,27 +38,25 @@ namespace WLVSTools.Web.WebInfrastructure.Selenium.Automation.AIFS.ProfessionalP
 
             var personalInfo = Data.Personalnfo;
 
+            WebDriver.FindElement(By.XPath("//input[@id='AccountName' and not(@disabled)]"), maxTimeInSecondsToFindElement).SendKeysCustom(personalInfo.Company.Name);
+            WebDriver.FindElement(By.XPath("//input[@id='CompanyWebsite' and not(@disabled)]"), maxTimeInSecondsToFindElement).SendKeysCustom(personalInfo.Company.Url);
+            WebDriver.FindElement(By.XPath("//input[@id='PointOfContactFirstName' and not(@disabled)]"), maxTimeInSecondsToFindElement).SendKeysCustom(personalInfo.FirstName);
+            WebDriver.FindElement(By.XPath("//input[@id='PointOfContactLastName' and not(@disabled)]"), maxTimeInSecondsToFindElement).SendKeysCustom(personalInfo.LastName);
+            WebDriver.FindElement(By.XPath("//input[@id='PointOfContactEmail' and not(@disabled)]"), maxTimeInSecondsToFindElement).SendKeysCustom(personalInfo.Email);
+            WebDriver.FindElement(By.XPath("//input[@id='PointOfContactPhone' and not(@disabled)]"), maxTimeInSecondsToFindElement).SendKeysCustom(personalInfo.Phone);
+            WebDriver.FindElement(By.XPath("//input[@id='Password' and not(@disabled)]"), maxTimeInSecondsToFindElement).SendKeysCustom(personalInfo.Password);
+            WebDriver.FindElement(By.XPath("//input[@id='ConfirmPassword' and not(@disabled)]"), maxTimeInSecondsToFindElement).SendKeysCustom(personalInfo.Password);
+
             if (isThirdParty)
             {
-
+                WebDriver.FindElement(By.XPath("//input[@id='Title' and not(@disabled)]"), maxTimeInSecondsToFindElement).SendKeysCustom(personalInfo.Title);
             }
-            else
-            {
-                WebDriver.FindElement(By.Id("AccountName"), maxTimeInSecondsToFindElement).SendKeys(personalInfo.Company.Name);
-                WebDriver.FindElement(By.Id("CompanyWebsite"), maxTimeInSecondsToFindElement).SendKeys(personalInfo.Company.Url);
-                WebDriver.FindElement(By.Id("PointOfContactFirstName"), maxTimeInSecondsToFindElement).SendKeys(personalInfo.FirstName);
-                WebDriver.FindElement(By.Id("PointOfContactLastName"), maxTimeInSecondsToFindElement).SendKeys(personalInfo.LastName);
-                WebDriver.FindElement(By.Id("PointOfContactEmail"), maxTimeInSecondsToFindElement).SendKeys(personalInfo.Email);
-                WebDriver.FindElement(By.Id("PointOfContactPhone"), maxTimeInSecondsToFindElement).SendKeys(personalInfo.Phone);
-                WebDriver.FindElement(By.Id("Password"), maxTimeInSecondsToFindElement).SendKeys(personalInfo.Password);
-                WebDriver.FindElement(By.Id("ConfirmPassword"), maxTimeInSecondsToFindElement).SendKeys(personalInfo.Password);
 
-                var elementLeadSource = WebDriver.FindElement(By.Id("ddlLeadSource"), maxTimeInSecondsToFindElement);
-                var ddlLeadSource = new SelectElement(elementLeadSource);
-                ddlLeadSource.SelectByIndex(1);
+            var elementLeadSource = WebDriver.FindElement(By.XPath("//select[@id='ddlLeadSource' and not(@disabled)]"), maxTimeInSecondsToFindElement);
+            var ddlLeadSource = new SelectElement(elementLeadSource);
+            ddlLeadSource.SelectByIndex(1);
 
-                WebDriver.FindElement(By.Id("btnSubmit"), maxTimeInSecondsToFindElement).Click();
-            }
+            WebDriver.FindElement(By.Id("btnSubmit"), maxTimeInSecondsToFindElement).Click();
         }
     }
 }

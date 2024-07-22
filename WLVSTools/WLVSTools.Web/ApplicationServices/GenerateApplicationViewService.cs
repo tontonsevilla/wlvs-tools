@@ -396,7 +396,7 @@ namespace WLVSTools.Web.ApplicationServices
 
             var list = nodes.ElementAt(0).Descendants("li").Select(n => new Company
             {
-                Name = $"{n.ChildNodes[1].InnerText} Test Data",
+                Name = $"{n.ChildNodes[1].InnerText.Replace("&amp;", "&")} Test Data",
                 Url = $"www.{n.ChildNodes[1].InnerText.Replace(" ", "")}.test"
             }).ToList();
 
