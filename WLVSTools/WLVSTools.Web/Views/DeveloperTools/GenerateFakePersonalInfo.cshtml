@@ -6,12 +6,15 @@
 
 <div class="card">
     <form asp-action="GenerateFakePersonalInfo" asp-controller="DeveloperTools" method="get">
+        <input type="hidden" value="true" name="HasData" />
         <div class="card-body">
             <div class="form-group">
                 @Html.TextBoxFor(m => m.Country, new { @class = "form-control", @placeholder = "Country" })
+                @Html.ValidationMessageFor(m => m.Country)
             </div>
             <div class="form-group">
                 @Html.TextBoxFor(m => m.State, new { @class = "form-control", @placeholder = "State" })
+                @Html.ValidationMessageFor(m => m.State)
             </div>
             <button type="submit" class="btn btn-primary fa-pull-right">Generate</button>
         </div>

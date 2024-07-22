@@ -7,6 +7,11 @@ namespace WLVSTools.Web.Controllers
     {
         public IActionResult GenerateFakePersonalInfo(GenerateFakePersonalInfo model)
         {
+            if (!model.HasData)
+            {
+                ModelState.Clear();
+            }
+
             return View(model);
         }
     }
