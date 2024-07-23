@@ -24,8 +24,6 @@ namespace WLVSTools.Web.Controllers.api
         {
             var personData = _generateApplicationViewService.PersonalInfo(data);
 
-            personData.RunEndDateTime = DateTime.Now;
-
             return Ok(personData);
         }
 

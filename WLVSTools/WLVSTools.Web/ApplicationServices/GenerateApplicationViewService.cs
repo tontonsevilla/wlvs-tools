@@ -80,7 +80,8 @@ namespace WLVSTools.Web.ApplicationServices
                     UserName = email,
                     Password = "P@ssw0rd"
                 },
-                Company = company
+                Company = company,
+                RunEndDateTime = DateTime.Now
             };
 
             return personData;

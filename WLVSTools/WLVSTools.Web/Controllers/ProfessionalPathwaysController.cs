@@ -43,7 +43,7 @@ namespace WLVSTools.Web.Controllers
                 viewModel.Personalnfo = _generateApplicationViewService.PersonalInfo(new Models.DeveloperTools.GenerateFakePersonalInfo
                 {
                     Country = viewModel.Country,
-                    State = viewModel.State
+                    State = viewModel.State,
                 });
 
                 var manager = new WebInfrastructure.Managers.SeleniumManager();
