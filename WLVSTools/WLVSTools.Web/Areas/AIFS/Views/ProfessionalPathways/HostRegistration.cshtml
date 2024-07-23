@@ -45,6 +45,28 @@
     </div>
 </div>
 
+@if (Model != null)
+{
+    @section Scripts{
+        <script>
+            $(function () {
+                $("#Country").on("change", function () {
+                    let selectedCountry = $(this).val();
+
+                    if (selectedCountry == "United States") {
+                        $("#State").prop("disabled", false);
+                    } else {
+                        $("#State").val("");
+                        $("#State").prop("disabled", true);
+                    }
+                });
+
+                $("#Country").trigger("change");
+            });
+        </script>
+    }
+}
+
 @if (Model != null && Model.Personalnfo != null)
 {
     @section Styles{
