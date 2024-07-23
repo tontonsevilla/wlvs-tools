@@ -1,5 +1,7 @@
 using Microsoft.Extensions.FileProviders;
+using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using WLVSTools.Web.WebInfrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,17 +23,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-//app.UseStaticFiles();   
-// get the directory
-var assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-var assetDirectory = Path.Combine(assemblyDirectory, "Resources");
 
-// use it
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(assetDirectory),
-    //RequestPath = "/Resources"
-});
+setStaticFiles();
 
 app.UseRouting();
 
@@ -49,3 +42,29 @@ app.MapControllerRoute(
 
 
 app.Run();
+
+void setStaticFiles()
+{
+    var isWindowsHosting = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+    var processName = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().ProcessName);
+    var isIISHosting = (processName.Contains("w3wp", StringComparison.OrdinalIgnoreCase) ||
+        processName.Contains("iisexpress", StringComparison.OrdinalIgnoreCase));
+
+    if (isWindowsHosting || isIISHosting)
+    {
+        // get the directory
+        var assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        var assetDirectory = Path.Combine(assemblyDirectory, "Resources");
+
+        // use it
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(assetDirectory),
+            RequestPath = "/Resources"
+        });
+    }
+    else
+    {
+        app.UseStaticFiles();
+    }
+}
