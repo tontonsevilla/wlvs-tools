@@ -5,20 +5,19 @@
 }
 
 <div class="card">
-    <form asp-action="GenerateFakePersonalInfo" asp-controller="DeveloperTools" method="get">
-        <input type="hidden" value="true" name="HasData" />
-        <div class="card-body">
-            <div class="form-group">
-                @Html.TextBoxFor(m => m.Country, new { @class = "form-control", @placeholder = "Country" })
-                @Html.ValidationMessageFor(m => m.Country)
-            </div>
-            <div class="form-group">
-                @Html.TextBoxFor(m => m.State, new { @class = "form-control", @placeholder = "State" })
-                @Html.ValidationMessageFor(m => m.State)
-            </div>
-            <button type="submit" class="btn btn-primary fa-pull-right">Generate</button>
+    <div class="card-body">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Country)
+            @Html.DropDownListFor(m => m.Country, Model.CountryList, null, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Country)
         </div>
-    </form>
+        <div class="form-group">
+            @Html.LabelFor(m => m.State)
+            @Html.DropDownListFor(m => m.State, Model.StateList, null, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.State)
+        </div>
+        <button type="button" id="btnGenerate" class="btn btn-primary fa-pull-right">Generate</button>
+    </div>
 </div>
 
 <div class="card">
@@ -29,7 +28,7 @@
 
 @if (Model != null)
 {
-    @section Styles{ 
+    @section Styles{
         <style>
             pre {
                 background-color: ghostwhite;
@@ -52,21 +51,41 @@
         </style>
     }
 
-    @section Scripts{ 
+    @section Scripts{
         <script>
             $(function () {
-                $.ajax({
-                    url: "/api/Generate/Personalinfo?country=@Model.Country&state=@Model.State",
-                    dataType: "json"
-                }).done(function (data) {
-                    $('#resultContainer').html(prettyPrint(data));
+                $("#btnGenerate").on("click", function () {
+                    let selectedCountry = $("#Country").val();
+                    let selectedState = $("#State").val();
 
-                    $(".btn-copy").off("click").on("click", function () {
-                        let value = $(this).parent().text().replace(/["']/g, "");
-                        navigator.clipboard.writeText(value);
-                        toastr.success("Copy '" + value + "'", "Successful");
-                    });
+                     $.ajax({
+                         url: `/api/Generate/Personalinfo?country=${selectedCountry}&state=${selectedState}`,
+                         dataType: "json"
+                     }).done(function (data) {
+                         $('#resultContainer').html(prettyPrint(data));
+
+                         $(".btn-copy").off("click").on("click", function () {
+                             let value = $(this).parent().text().replace(/["']/g, "");
+                             navigator.clipboard.writeText(value);
+                             toastr.success("Copy '" + value + "'", "Successful");
+                         });
+
+                         $("#pTotalRuntime").html('<strong>Total Runtime in Seconds: <em>' + data.totalRunTimeInSeconds.toString() + '</em></strong>');
+                     });
                 });
+
+                $("#Country").on("change", function () {
+                    let selectedCountry = $(this).val();
+                    
+                    if (selectedCountry == "United States") {
+                        $("#State").prop("disabled", false);
+                    } else {
+                        $("#State").val("");
+                        $("#State").prop("disabled", true);
+                    }
+                });
+
+                $("#Country").trigger("change");
             });
 
             function replacer (match, pIndent, pKey, pVal, pEnd) {

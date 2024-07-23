@@ -32,26 +32,6 @@ namespace WLVSTools.Web.Models.AIFS
             }
         }
 
-        public List<SelectListItem> CountryList
-        {
-            get
-            {
-                return new List<SelectListItem>
-                {
-                    new SelectListItem("Please select", ""),
-                    new SelectListItem("United States", "United States"),
-                    new SelectListItem("Canda", "Canada"),
-                    new SelectListItem("United Kingdom", "United Kingdom"),
-                    new SelectListItem("Australia", "Australia"),
-                    new SelectListItem("Brazil", "Brazil"),
-                    new SelectListItem("France", "France"),
-                    new SelectListItem("Germany", "Germany"),
-                    new SelectListItem("Italy", "Italy"),
-                    new SelectListItem("Spain", "Spain")
-                }.OrderBy(m => m.Value).ToList();
-            }
-        }
-
         public Personalnfo? Personalnfo { get; set; }
     }
 }

@@ -44,10 +44,12 @@
                 <div class="container-fluid">
                     @Html.ValidationSummary(true)
                     @RenderBody()
-                    @if (ViewBag.TotalRuntime != null)
-	                {
-		                <strong>Total Runtime in Seconds: <em>@ViewBag.TotalRuntime</em></strong>
-	                }
+                    <p id="pTotalRuntime">
+                        @if (ViewBag.TotalRuntime != null)
+                        {
+                            <strong>Total Runtime in Seconds: <em>@ViewBag.TotalRuntime</em></strong>
+                        }
+                    </p>
                 </div>
             </section>
             <!-- /.content -->

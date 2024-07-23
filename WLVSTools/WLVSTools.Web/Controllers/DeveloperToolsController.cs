@@ -5,14 +5,23 @@ namespace WLVSTools.Web.Controllers
 {
     public class DeveloperToolsController : Controller
     {
-        public IActionResult GenerateFakePersonalInfo(GenerateFakePersonalInfo model)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public DeveloperToolsController(IWebHostEnvironment webHostEnvironment)
         {
-            if (!model.HasData)
+            _webHostEnvironment = webHostEnvironment;
+        }
+
+        public IActionResult GenerateFakePersonalInfo(GenerateFakePersonalInfo viewModel)
+        {
+            if (!viewModel.HasData)
             {
                 ModelState.Clear();
             }
 
-            return View(model);
+            viewModel.WebHostEnvironment = _webHostEnvironment;
+
+            return View(viewModel);
         }
     }
 }

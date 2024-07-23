@@ -36,6 +36,8 @@ namespace WLVSTools.Web.Controllers
         [HttpPost]
         public IActionResult HostRegistration(ProfessionalPathwaysRegistration viewModel)
         {
+            viewModel.WebHostEnvironment = _webHostEnvironment;
+
             if (ModelState.IsValid)
             {
                 viewModel.Personalnfo = _generateApplicationViewService.PersonalInfo(new Models.DeveloperTools.GenerateFakePersonalInfo

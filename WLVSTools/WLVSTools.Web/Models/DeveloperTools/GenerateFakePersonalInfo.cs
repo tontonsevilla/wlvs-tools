@@ -3,7 +3,7 @@ using WLVSTools.Web.WebInfrastructure.Attrbutes.Validations;
 
 namespace WLVSTools.Web.Models.DeveloperTools
 {
-    public class GenerateFakePersonalInfo
+    public class GenerateFakePersonalInfo : BaseModel
     {
         [Required]
         public string? Country { get; set; }
