@@ -43,7 +43,6 @@
                 <div class="col-sm-12 col-md-6">
                     <div class="form-group">
                         @Html.LabelFor(m => m.EODDate)
-                        @*@Html.Dat(m => m.EODDate, new { @class = "form-control" })*@
                         @Html.TextBoxFor(m => m.EODDate, new { @class = "form-control", @type = "date" })
                         @Html.ValidationMessageFor(m => m.EODDate)
                     </div>
@@ -90,6 +89,11 @@
         $(function () {
             $("#btnAddItems").on("click", function () {
                 
+            });
+
+            $("#EODDate").on("change", function () {
+                let selectedDate = moment($(this).val());
+                $("#Subject").val(`EOD REPORT FOR ${selectedDate.format("ll").toUpperCase()}`);
             });
         });
     </script>
