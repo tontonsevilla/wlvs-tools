@@ -81,6 +81,7 @@ namespace WLVSTools.Web.ApplicationServices
                     Password = "P@ssw0rd"
                 },
                 Company = company,
+                RunStartDateTime = data.RunStartDateTime,
                 RunEndDateTime = DateTime.Now
             };
 
