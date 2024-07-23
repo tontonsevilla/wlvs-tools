@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>WLVS Tools | @ViewBag.Title</title>
 
-    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="/plugins/pace-progress/themes/black/pace-theme-flat-top.css">
-    <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
-    <link rel="stylesheet" href="/ui-framework/admin-lte-3.2.0/css/adminlte.min.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="~/plugins/pace-progress/themes/black/pace-theme-flat-top.css">
+    <link rel="stylesheet" href="~/plugins/toastr/toastr.min.css">
+    <link rel="stylesheet" href="~/ui-framework/admin-lte-3.2.0/css/adminlte.min.css">
+    <link rel="stylesheet" href="~/css/style.css">
 
     @RenderSection("Styles", false)
+    <script>
+        var global_approot = '@WLVSTools.Web.WebInfrastructure.General.Helper.GetWebRoot(Context)';
+    </script>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed pace-primary">
     <!-- Site wrapper -->
@@ -62,11 +65,12 @@
     </div>
     <!-- ./wrapper -->
 
-    <script src="/plugins/jquery/jquery.min.js"></script>
-    <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/plugins/pace-progress/pace.min.js"></script>
-    <script src="/plugins/toastr/toastr.min.js"></script>
-    <script src="/ui-framework/admin-lte-3.2.0/js/adminlte.min.js"></script>
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <script src="~/js/pathConfig.js"></script>
+    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/plugins/pace-progress/pace.min.js"></script>
+    <script src="~/plugins/toastr/toastr.min.js"></script>
+    <script src="~/ui-framework/admin-lte-3.2.0/js/adminlte.min.js"></script>
     @RenderSection("Scripts", false)
 </body>
 </html>

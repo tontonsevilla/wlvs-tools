@@ -7,9 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\pathConfig.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Resources\assets\img\" />
     <Folder Include="Resources\css\" />
-    <Folder Include="Resources\js\" />
     <Folder Include="Resources\plugins\bootstrap\js\" />
     <Folder Include="Resources\plugins\fontawesome-free\css\" />
     <Folder Include="Resources\plugins\fontawesome-free\webfonts\" />
@@ -17,8 +20,11 @@
     <Folder Include="Resources\ui-framework\admin-lte-3.2.0\css\alt\" />
     <Folder Include="Resources\ui-framework\admin-lte-3.2.0\img\credit\" />
     <Folder Include="Resources\ui-framework\admin-lte-3.2.0\js\pages\" />
-    <Folder Include="wwwroot\js\" />
     <Folder Include="wwwroot\assets\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\pathConfig.js" />
   </ItemGroup>
 
   <ItemGroup>

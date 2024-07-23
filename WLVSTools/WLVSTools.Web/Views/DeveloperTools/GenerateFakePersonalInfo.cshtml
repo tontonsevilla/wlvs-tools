@@ -59,7 +59,7 @@
                     let selectedState = $("#State").val();
 
                      $.ajax({
-                         url: `/api/Generate/Personalinfo?country=${selectedCountry}&state=${selectedState}`,
+                         url: $.appendRootToPath(`/api/Generate/Personalinfo?country=${selectedCountry}&state=${selectedState}`),
                          dataType: "json"
                      }).done(function (data) {
                          $('#resultContainer').html(prettyPrint(data));
