@@ -3,6 +3,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.Extensions;
 using System.Collections.Generic;
 using WLVSTools.Web.Core.General;
+using WLVSTools.Web.WebInfrastructure.Extensions.Selenium;
 using WLVSTools.Web.WebInfrastructure.Selenium.Interfaces;
 
 namespace WLVSTools.Web.WebInfrastructure.Managers
@@ -44,8 +45,7 @@ namespace WLVSTools.Web.WebInfrastructure.Managers
             }
             catch
             {
-                Screenshot screenshot = WebDriverExtensions.TakeScreenshot(seleniumAutomation.WebDriver);
-                screenshot.SaveAsFile($"Screenshot/SS_Error_{seleniumAutomation.GetType().Name}_{DateTime.Now.ToString("yyyyMMddhhmmss")}.png");
+                seleniumAutomation.WebDriver.TakeScreenShot(seleniumAutomation);
                 throw;
             }
             finally

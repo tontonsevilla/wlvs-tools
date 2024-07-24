@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using WLVSTools.Web.Core.General;
 using WLVSTools.Web.Models.BlastAsia;
+using WLVSTools.Web.WebInfrastructure.Extensions;
 using WLVSTools.Web.WebInfrastructure.Extensions.Selenium;
 using WLVSTools.Web.WebInfrastructure.Selenium.Interfaces;
 
@@ -15,8 +16,8 @@ namespace WLVSTools.Web.WebInfrastructure.Selenium.Automation.BlastAsia
 
         public EndOfDay Data { get; private set; }
         public IWebDriver WebDriver { get; set; }
-        public bool Headless { get; set; } = false;
-        public bool EagerPageLoadStrategy { get; set; } = false;
+        public bool Headless { get; set; } = true;
+        public bool EagerPageLoadStrategy { get; set; } = true;
 
         public ServiceResponse<ValueResponse<String>> Execute(int maxTimeInSecondsToFindElement = 60)
         {
@@ -48,8 +49,18 @@ namespace WLVSTools.Web.WebInfrastructure.Selenium.Automation.BlastAsia
                         WebDriver.FindElementClickable(By.CssSelector($"mat-option[data-cy='{Data.EODAccount}']"), maxTimeInSecondsToFindElement).Click();
 
                         //ADD ITEM
-                        WebDriver.FindElementClickable(By.XPath("//span[@mattooltip='Add New Record']/ancestor::button"), maxTimeInSecondsToFindElement).Click();
-                        //WebDriver.FindElement(By.CssSelector("textarea[data-cy='DescriptionEOD']"), maxTimeInSecondsToFindElement).SendKeysCustom(Data.eo);
+                        foreach (var item in Data.TaskItems)
+                        {
+                            WebDriver.FindElementClickable(By.XPath("//span[@mattooltip='Add New Record']/ancestor::button"), maxTimeInSecondsToFindElement).Click();
+                            WebDriver.FindElement(By.CssSelector("textarea[data-cy='DescriptionEOD']"), maxTimeInSecondsToFindElement).SendKeysCustom(item.Description);
+                            WebDriver.FindElement(By.CssSelector("input[data-cy='NoofHoursEOD']"), maxTimeInSecondsToFindElement).SendKeysCustom(item.NoOfHours.ToSafeString());
+                            WebDriver.FindElement(By.CssSelector("input[data-cy='NoofMinutesEOD']"), maxTimeInSecondsToFindElement).SendKeysCustom(item.NoOfMinutes.ToSafeString());
+                            WebDriver.FindElementClickable(By.XPath("//span[@mattooltip='Save']/ancestor::button"), maxTimeInSecondsToFindElement).Click();
+                        }
+
+                        //FOR DEBUGGING PURPOSES ONLY (Make sure to disable headless)
+                        //WebDriver.ScrollToBottom();
+                        //WebDriver.TakeScreenShot(this);
                     }
                 }
             }

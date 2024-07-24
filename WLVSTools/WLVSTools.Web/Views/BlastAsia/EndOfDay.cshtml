@@ -72,7 +72,7 @@
                         var idx = Model.TaskItems.IndexOf(item);
                         <tr>
                             <td>
-                                @Html.TextBoxFor(m => m.TaskItems[idx].Description, new { @class = "form-control"})
+                                @Html.TextAreaFor(m => m.TaskItems[idx].Description, new { @class = "form-control"})
                                 @Html.ValidationMessageFor(m => m.TaskItems[idx].Description)
                             </td>
                             <td>
@@ -102,7 +102,7 @@
                 let rowCount = $("#tblTaskItems tbody tr").length;
                 let trItem = `
                 <tr>
-                    <td><input type="text" name="TaskItems[${rowCount}].Description" class="form-control" /></td>
+                    <td><textarea name="TaskItems[${rowCount}].Description" class="form-control"></textarea></td>
                     <td><input type="number" name="TaskItems[${rowCount}].NoOfHours" class="form-control" /></td>
                     <td><input type="number" name="TaskItems[${rowCount}].NoOfMinutes" class="form-control" /></td>
                     <td><buton type="button" class="btnRemoveItem btn btn-sm btn-danger fa-pull-right"><i class="fa fa-trash"></i></buton></td>

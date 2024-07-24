@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
+using WLVSTools.Web.WebInfrastructure.Selenium.Interfaces;
 
 namespace WLVSTools.Web.WebInfrastructure.Extensions.Selenium
 {
@@ -29,8 +30,16 @@ namespace WLVSTools.Web.WebInfrastructure.Extensions.Selenium
 
         public static IWebElement ElementVisible(this IWebDriver driver, By by, int timeoutInSeconds)
         {
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeoutInSeconds));
-            return wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(by));
+            IWebElement element = null;
+
+            try
+            {
+                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeoutInSeconds));
+                element = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(by));
+            }
+            catch { }
+
+            return element;
         }
 
         public static void SendKeysCustom(this IWebElement element, string value)
@@ -38,6 +47,18 @@ namespace WLVSTools.Web.WebInfrastructure.Extensions.Selenium
             element.Click();
             element.Clear();
             element.SendKeys(value);
+        }
+
+        public static void TakeScreenShot(this IWebDriver driver, ISeleniumAutomation seleniumAutomation)
+        {
+            Screenshot screenshot = OpenQA.Selenium.Support.Extensions.WebDriverExtensions.TakeScreenshot(driver);
+            screenshot.SaveAsFile($"Screenshot/SS_Error_{seleniumAutomation.GetType().Name}_{DateTime.Now.ToString("yyyyMMddhhmmss")}.png");
+        }
+
+        public static void ScrollToBottom(this IWebDriver driver)
+        {
+            var js = driver as IJavaScriptExecutor;
+            js.ExecuteScript("window.scrollBy(0,document.body.scrollHeight)");
         }
     }
 }
