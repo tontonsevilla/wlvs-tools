@@ -38,6 +38,9 @@ namespace WLVSTools.Web.Models.BlastAsia
         [Display(Name = "Email Subject")]
         public string Subject { get; set; } = $"WFH {DateTime.Now.ToString("MM/dd/yyyy")}";
 
+        [Display(Name = "Email Date"), DataType(DataType.Date)]
+        public DateTime? EmailDate { get; set; } = DateTime.Now;
+
         [Display(Name = "Email Body")]
         public string Body { get; set; }
     }

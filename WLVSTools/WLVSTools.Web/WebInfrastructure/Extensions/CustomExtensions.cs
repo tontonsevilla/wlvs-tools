@@ -39,11 +39,16 @@ namespace WLVSTools.Web.WebInfrastructure.Extensions
 
         public static string CustomRaw(this IHtmlHelper htmlHelper, IHtmlContent content)
         {
-            using (var writer = new System.IO.StringWriter())
+            if (content != null)
             {
-                content.WriteTo(writer, HtmlEncoder.Default);
-                return HttpUtility.HtmlDecode(writer.ToString());
+                using (var writer = new System.IO.StringWriter())
+                {
+                    content.WriteTo(writer, HtmlEncoder.Default);
+                    return HttpUtility.HtmlDecode(writer.ToString());
+                }
             }
+
+            return string.Empty;
         }
     }
 }

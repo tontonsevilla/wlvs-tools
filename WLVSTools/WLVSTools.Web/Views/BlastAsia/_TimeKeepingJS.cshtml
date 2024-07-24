@@ -9,5 +9,9 @@
 
             window.location.href = mailTo;
         });
+
+        $("#EmailDate").on("change", function () {
+            $("#Subject").val(`WFH ${moment($(this).val()).format("L")}`);
+        });
     });
 </script>
