@@ -45,7 +45,7 @@
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
-                    @Html.ValidationSummary(true)
+                    @Html.Raw(Html.CustomRaw(Html.CustomValidationSummary()))
                     @RenderBody()
                     <p id="pTotalRuntime">
                         @if (ViewBag.TotalRuntime != null)
