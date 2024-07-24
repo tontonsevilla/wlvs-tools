@@ -36,7 +36,7 @@
         <div class="card-body">
             <div class="form-group">
                 @Html.LabelFor(m => m.Subject)
-                @Html.TextBoxFor(m => m.Subject, new { @class = "form-control" })
+                @Html.TextBoxFor(m => m.Subject, new { @class = "form-control", @readonly="readonly" })
                 @Html.ValidationMessageFor(m => m.Subject)
             </div>
             <div class="row">
@@ -55,31 +55,42 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <button type="button" id="btnAddItems" class="btn btn-primary"><i class="fa fa-plus"></i></button>
-                </div>
-            </div>
             <table id="tblTaskItems" class="table table-striped">
+                <caption>@Html.ValidationMessageFor(m => m.TaskItems)</caption>
                 <thead>
                     <tr>
                         <th>Task</th>
                         <th>No. of Hours</th>
                         <th>No. of Minutes</th>
+                        <th class="col-md-1"><button type="button" id="btnAddItems" class="btn btn-primary btn-sm fa-pull-right"><i class="fa fa-plus"></i></button></th>
                     </tr>
                 </thead>
                 <tbody>
                     <!-- All Task Items Here -->
-                    <tr class="hidden">
-                        <td><input type="text" name="TaskItems.Description" class="form-control" /></td>
-                        <td><input type="number" name="TaskItems.NoOfHours" class="form-control" /></td>
-                        <td><input type="number" name="TaskItems.NoOfMinutes" class="form-control" /></td>
-                    </tr>
+                    @foreach (var item in Model.TaskItems)
+                    {
+                        var idx = Model.TaskItems.IndexOf(item);
+                        <tr>
+                            <td>
+                                @Html.TextBoxFor(m => m.TaskItems[idx].Description, new { @class = "form-control"})
+                                @Html.ValidationMessageFor(m => m.TaskItems[idx].Description)
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(m => m.TaskItems[idx].NoOfHours, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.TaskItems[idx].NoOfHours)
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(m => m.TaskItems[idx].NoOfMinutes, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.TaskItems[idx].NoOfMinutes)
+                            </td>
+                            <td><buton type="button" class="btnRemoveItem btn btn-sm btn-danger fa-pull-right"><i class="fa fa-trash"></i></buton></td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
         <div class="card-footer">
-            <button type="submit" id="btnSubmit" class="btn btn-success fa-pull-right">Submit</button>
+            <button type="submit" id="btnSubmit" class="btn btn-primary fa-pull-right">Submit</button>
         </div>
     </div>
 }
@@ -88,13 +99,31 @@
     <script>
         $(function () {
             $("#btnAddItems").on("click", function () {
-                
+                let rowCount = $("#tblTaskItems tbody tr").length;
+                let trItem = `
+                <tr>
+                    <td><input type="text" name="TaskItems[${rowCount}].Description" class="form-control" /></td>
+                    <td><input type="number" name="TaskItems[${rowCount}].NoOfHours" class="form-control" /></td>
+                    <td><input type="number" name="TaskItems[${rowCount}].NoOfMinutes" class="form-control" /></td>
+                    <td><buton type="button" class="btnRemoveItem btn btn-sm btn-danger fa-pull-right"><i class="fa fa-trash"></i></buton></td>
+                </tr>
+                `;
+                $("#tblTaskItems tbody").append(trItem);
+                bindBtnRemoveItem();
             });
 
             $("#EODDate").on("change", function () {
                 let selectedDate = moment($(this).val());
                 $("#Subject").val(`EOD REPORT FOR ${selectedDate.format("ll").toUpperCase()}`);
             });
+
+            bindBtnRemoveItem();
         });
+
+        function bindBtnRemoveItem() {
+            $(".btnRemoveItem").off("click").on("click", function () {
+                $(this).closest("tr").remove();
+            });
+        }
     </script>
 }

@@ -6,6 +6,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using WLVSTools.Web.WebInfrastructure.Extensions;
 using WLVSTools.Web.WebInfrastructure.Selenium.Automation.BlastAsia;
+using WLVSTools.Web.Core.General;
 
 namespace WLVSTools.Web.Controllers
 {
@@ -50,7 +51,17 @@ namespace WLVSTools.Web.Controllers
             {
                 var seleniumManager = new WebInfrastructure.Managers.SeleniumManager();
                 var eodSubmissionAutomation = new EODSubmissionAutomation(model);
-                seleniumManager.Execute(eodSubmissionAutomation);
+                ServiceResponse<ValueResponse<String>> response = seleniumManager.Execute(eodSubmissionAutomation);
+
+                if (response.HasError)
+                {
+                    ModelState.AddErrorMessages(response.ErrorMessages);
+                }
+
+                if (response.HasData)
+                {
+                    ModelState.AddErrorMessage(response.Model.Value);
+                }
             }
 
             return View(model);

@@ -1,11 +1,14 @@
 ﻿using OpenQA.Selenium;
+using WLVSTools.Web.Core.General;
 
 namespace WLVSTools.Web.WebInfrastructure.Selenium.Interfaces
 {
     public interface ISeleniumAutomation
     {
+        bool Headless { get; set; }
+        bool EagerPageLoadStrategy { get; set; }
         IWebDriver WebDriver { get; set; }
-        void Execute(int maxTimeInSecondsToFindElement = 60);
+        ServiceResponse<ValueResponse<String>> Execute(int maxTimeInSecondsToFindElement = 60);
     }
 
     public interface ISeleniumAutomationWebScrape

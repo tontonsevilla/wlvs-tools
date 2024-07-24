@@ -1,5 +1,5 @@
 ﻿using OpenQA.Selenium;
-using WLVSTools.Web.WebInfrastructure.Extensions;
+using WLVSTools.Web.WebInfrastructure.Extensions.Selenium;
 using WLVSTools.Web.WebInfrastructure.Selenium.Interfaces;
 
 namespace WLVSTools.Web.WebInfrastructure.Selenium.Automation

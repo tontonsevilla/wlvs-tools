@@ -1,8 +1,9 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using WLVSTools.Web.Core.General;
 using WLVSTools.Web.Models.AIFS;
 using WLVSTools.Web.Models.AIFS.ProfessionalPathways;
-using WLVSTools.Web.WebInfrastructure.Extensions;
+using WLVSTools.Web.WebInfrastructure.Extensions.Selenium;
 using WLVSTools.Web.WebInfrastructure.Selenium.Interfaces;
 
 namespace WLVSTools.Web.WebInfrastructure.Selenium.Automation.AIFS.ProfessionalPathways
@@ -17,8 +18,13 @@ namespace WLVSTools.Web.WebInfrastructure.Selenium.Automation.AIFS.ProfessionalP
         public ParticipatRegistration Data { get; private set; }
 
         public IWebDriver WebDriver { get; set; }
-        public void Execute(int maxTimeInSecondsToFindElement = 60)
+        public bool Headless { get; set; } = true;
+        public bool EagerPageLoadStrategy { get; set; } = true;
+
+        public ServiceResponse<ValueResponse<String>> Execute(int maxTimeInSecondsToFindElement = 60)
         {
+            var response = new ServiceResponse<ValueResponse<String>>();
+
             WebDriver.Navigate().GoToUrl(Data.Url);
 
             WebDriver.FindElement(By.XPath("//input[@value='True' and @class='HaveUSProfessionalTrainingOpportunity']"), maxTimeInSecondsToFindElement).Click();
@@ -43,6 +49,8 @@ namespace WLVSTools.Web.WebInfrastructure.Selenium.Automation.AIFS.ProfessionalP
             ddlLeadSource.SelectByIndex(1);
 
             WebDriver.FindElement(By.XPath("//button[@type='submit']"), maxTimeInSecondsToFindElement).Click();
+
+            return response;
         }
     }
 }

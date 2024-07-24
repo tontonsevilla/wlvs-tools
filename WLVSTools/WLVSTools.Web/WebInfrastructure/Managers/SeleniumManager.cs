@@ -1,6 +1,8 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.Extensions;
 using System.Collections.Generic;
+using WLVSTools.Web.Core.General;
 using WLVSTools.Web.WebInfrastructure.Selenium.Interfaces;
 
 namespace WLVSTools.Web.WebInfrastructure.Managers
@@ -13,25 +15,37 @@ namespace WLVSTools.Web.WebInfrastructure.Managers
 
         public SeleniumManager()
         {
-            setOptions();
             webDriver = new ChromeDriver(@"C:\WebDrivers", options);
         }
 
-        private void setOptions()
+        private void setOptions(ISeleniumAutomation seleniumAutomation)
         {
-            options.PageLoadStrategy = PageLoadStrategy.Eager;
-            options.AddArguments("headless");
+            if (seleniumAutomation.Headless)
+            {
+                options.AddArguments("headless");
+            }
+
+            if (seleniumAutomation.EagerPageLoadStrategy)
+            {
+                options.PageLoadStrategy = PageLoadStrategy.Eager;
+            }
         }
 
-        public void Execute(ISeleniumAutomation seleniumAutomation)
+        public ServiceResponse<ValueResponse<String>> Execute(ISeleniumAutomation seleniumAutomation)
         {
+            setOptions(seleniumAutomation);
+
+            var response = new ServiceResponse<ValueResponse<String>>();
+
             try
             {
                 seleniumAutomation.WebDriver = webDriver;
-                seleniumAutomation.Execute();
+                response = seleniumAutomation.Execute();
             }
             catch
             {
+                Screenshot screenshot = WebDriverExtensions.TakeScreenshot(seleniumAutomation.WebDriver);
+                screenshot.SaveAsFile($"Screenshot/SS_Error_{seleniumAutomation.GetType().Name}_{DateTime.Now.ToString("yyyyMMddhhmmss")}.png");
                 throw;
             }
             finally
@@ -39,6 +53,8 @@ namespace WLVSTools.Web.WebInfrastructure.Managers
                 seleniumAutomation.WebDriver.Close();
                 seleniumAutomation.WebDriver.Dispose();
             }
+
+            return response;
         }
 
         public string WebScrape(ISeleniumAutomationWebScrape seleniumAutomationWebScrape)

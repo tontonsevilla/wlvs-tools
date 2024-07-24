@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Screenshot\" />
     <Folder Include="Resources\assets\img\" />
     <Folder Include="Resources\css\" />
     <Folder Include="Resources\plugins\bootstrap\js\" />
