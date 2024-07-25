@@ -1,12 +1,6 @@
-﻿using HtmlAgilityPack;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics.Metrics;
-using System.Globalization;
-using System.Web;
+﻿using Microsoft.AspNetCore.Mvc;
 using WLVSTools.Web.ApplicationServices;
 using WLVSTools.Web.Models.DeveloperTools;
-using WLVSTools.Web.Models.Generate;
-using WLVSTools.Web.Services;
 
 namespace WLVSTools.Web.Controllers.api
 {
@@ -22,9 +16,16 @@ namespace WLVSTools.Web.Controllers.api
         [HttpGet]
         public IActionResult PersonalInfo(GenerateFakePersonalInfo data) 
         {
-            var personData = _generateApplicationViewService.PersonalInfo(data);
+            if (ModelState.IsValid)
+            {
+                var personData = _generateApplicationViewService.PersonalInfo(data);
 
-            return Ok(personData);
+                return Ok(personData);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
 
         [HttpGet]
