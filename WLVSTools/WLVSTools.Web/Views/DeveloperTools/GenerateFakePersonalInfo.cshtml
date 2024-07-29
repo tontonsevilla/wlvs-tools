@@ -60,7 +60,8 @@
 
                     sendRequest(`/api/Generate/Personalinfo?country=${selectedCountry}&state=${selectedState}`)
                         .done(function (data, textStatus, jqXHR) {
-                            $('#resultContainer').html(new PrettyPrint(data, true).print());
+                            let prettyPrint = new PrettyPrint(data, true);
+                            $('#resultContainer').html(prettyPrint.print());
 
                             $(".btn-copy").off("click").on("click", function () {
                                 let value = $(this).parent().text().replace(/["']/g, "");
@@ -71,7 +72,8 @@
                             $("#pTotalRuntime").html('<strong>Total Runtime in Seconds: <em>' + data.totalRunTimeInSeconds.toString() + '</em></strong>');
                         })
                         .fail(function (jqXHR, textStatus, errorThrown) {
-                            $('#resultContainer').html(new PrettyPrint(JSON.parse(jqXHR.responseText)).print());
+                            let prettyPrint = new PrettyPrint(JSON.parse(jqXHR.responseText));
+                            $('#resultContainer').html(prettyPrint.print());
                         });
                 });
 

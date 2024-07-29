@@ -16,15 +16,11 @@ function sendRequest(url, method = 'GET', data = undefined) {
 /**
  * Show json in a pretty print fashion
  */
-var PrettyPrint = (function () {
+function PrettyPrint(jsonObject, withCopyButton = false) {
+    var _jsonObject = jsonObject;
+    var _withCopyButton = withCopyButton;
 
-    // Constructor
-    function PrettyPrint(jsonObject, withCopyButton = false) {
-        this._jsonObject = jsonObject;
-        this._withCopyButton = withCopyButton;
-    }
-
-    function replacer(match, pIndent, pKey, pVal, pEnd) {
+    var replacer = function (match, pIndent, pKey, pVal, pEnd) {
         var key = '<span class=json-key>';
         var val = '<span class=json-value>';
         var str = '<span class=json-string>';
@@ -33,8 +29,7 @@ var PrettyPrint = (function () {
         if (pKey)
             r = r + key + pKey.replace(/[": ]/g, '') + '</span>: ';
         if (pVal) {
-            console.log(`this._withCopyButton => ${this._withCopyButton}`)
-            if (this._withCopyButton) {
+            if (_withCopyButton) {
                 r = r + (pVal[0] == '"' ? str : val) + pVal + '<button type="button" class="btn-copy btn btn-xs btn-success ml-1"><i class="fas fa-copy"></i></button></span>';
             } else {
                 r = r + (pVal[0] == '"' ? str : val) + pVal;
@@ -44,11 +39,11 @@ var PrettyPrint = (function () {
         return r + (pEnd || '');
     };
 
-    PrettyPrint.prototype.print = function () {
+    this.print = function () {
         var jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg;
-        return JSON.stringify(this._jsonObject, null, 3)
+        return JSON.stringify(_jsonObject, null, 3)
             .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
             .replace(/</g, '&lt;').replace(/>/g, '&gt;')
             .replace(jsonLine, replacer);
     };
-}());
+}
