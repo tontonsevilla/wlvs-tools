@@ -1,0 +1,35 @@
+﻿@model WLVSTools.Web.Models.AIFS.StudyAbroad.Registration
+
+@{
+    ViewBag.Title = "AIFS - Study Abroad Registration";
+}
+
+<div class="card card-primary">
+    <div class="card-header">
+        Parameters
+    </div>
+    <form action="~/AIFS/StudyAbroad/Registration" method="post">
+        <div class="card-body">
+            @Html.HiddenFor(m => m.Country)
+            <div class="row mb-3">
+                <div class="col-sm-12 col-md-4">
+                    @Html.LabelFor(m => m.State)
+                    @Html.DropDownListFor(m => m.State, Model.StateList, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.State)
+                </div>
+                <div class="col-sm-12 col-md-8">
+                    @Html.LabelFor(m => m.Url)
+                    @Html.TextBoxFor(m => m.Url, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Url)
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary fa-pull-right">Register</button>
+        </div>
+    </form>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <pre><code id="resultContainer"></code></pre>
+    </div>
+</div>
