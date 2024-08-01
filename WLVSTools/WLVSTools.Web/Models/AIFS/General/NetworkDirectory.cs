@@ -11,6 +11,9 @@ namespace WLVSTools.Web.Models.AIFS.General
 
         [Required]
         public string? Path { get; set; }
+
+        public string? Search { get; set; }
+        
         public bool IsSubmitted { get; set; }
 
         public List<string> DirectoryFiles { get; set; }

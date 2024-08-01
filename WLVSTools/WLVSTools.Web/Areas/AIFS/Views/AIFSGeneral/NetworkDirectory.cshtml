@@ -12,13 +12,22 @@
         @Html.Hidden("IsSubmitted", true)
         <div class="card-body">
             <div class="row mb-3">
-                <div class="col-sm-12">
+                <div class="col-sm-12 col-md-4">
                     @Html.LabelFor(m => m.Path)
                     @Html.TextBoxFor(m => m.Path, new { @class = "form-control" })
                     @Html.ValidationMessageFor(m => m.Path)
                 </div>
+                <div class="col-sm-12 col-md-4">
+                    @Html.LabelFor(m => m.Search)
+                    @Html.TextBoxFor(m => m.Search, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Search)
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary fa-pull-right">Go</button>
+            <div class="row">
+                <div class="col-sm-12 col-md-8">
+                    <button type="submit" class="btn btn-primary fa-pull-right">Search</button>
+                </div>
+            </div>
         </div>
     </form>
 </div>
