@@ -35,14 +35,15 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "api",
-    pattern: "api/{controller}/{action}/{id?}");
-app.MapControllerRoute(
     name: "customarea",
     pattern: "{area:exists}/{controller}/{action}/{id?}");
+
+app.MapControllerRoute(
+    name: "api",
+    pattern: "api/{controller}/{action}/{id?}");
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=index}/{id?}");
-
 
 app.Run();

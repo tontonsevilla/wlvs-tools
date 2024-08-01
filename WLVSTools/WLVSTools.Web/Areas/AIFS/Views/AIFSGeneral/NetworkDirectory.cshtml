@@ -1,0 +1,35 @@
+﻿@model WLVSTools.Web.Models.AIFS.General.NetworkDirectory
+
+@{
+    ViewBag.Title = "AIFS - Network Directory";
+}
+
+<div class="card card-primary">
+    <div class="card-header">
+        Parameters
+    </div>
+    <form action="~/AIFS/General/NetworkDirectory" method="post">
+        @Html.Hidden("IsSubmitted", true)
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-sm-12">
+                    @Html.LabelFor(m => m.Path)
+                    @Html.TextBoxFor(m => m.Path, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Path)
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary fa-pull-right">Go</button>
+        </div>
+    </form>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <ul>
+            @foreach(var path in Model.DirectoryFiles)
+            {
+                <li>@path</li>
+            }
+        </ul>
+    </div>
+</div>
