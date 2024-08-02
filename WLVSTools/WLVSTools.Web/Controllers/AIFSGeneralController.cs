@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Win32.SafeHandles;
+using System.Security.Principal;
 using WLVSTools.Web.Models.AIFS.General;
+using WLVSTools.Web.WebInfrastructure.General;
 
 namespace WLVSTools.Web.Controllers
 {
@@ -13,6 +16,8 @@ namespace WLVSTools.Web.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
+
+
         public IActionResult NetworkDirectory(NetworkDirectory model)
         {
             model.WebHostEnvironment = _webHostEnvironment;
@@ -22,11 +27,26 @@ namespace WLVSTools.Web.Controllers
 
             if (model.IsSubmitted && ModelState.IsValid)
             {
-                FileInfo fileInfo = new FileInfo(model.Path);
+                SafeAccessTokenHandle safeAccessTokenHandle = null;
+                var loginSuccessful = Impersonator.LogonUser(
+                    @"USERNAME HERE", 
+                    "DOMAIN HERE", 
+                    "PASSWORD HERE", 
+                    Impersonator.LOGON32_LOGON_NEW_CREDENTIALS, 
+                    Impersonator.LOGON32_PROVIDER_DEFAULT, 
+                    out safeAccessTokenHandle);
 
-                if (fileInfo.Exists)
+                if (loginSuccessful && safeAccessTokenHandle != null) 
                 {
-                    model.DirectoryFiles.Add(fileInfo.FullName);
+                    WindowsIdentity.RunImpersonated(safeAccessTokenHandle, () =>
+                    {
+                        FileInfo fileInfo = new FileInfo(model.Path);
+
+                        if (fileInfo.Exists)
+                        {
+                            model.DirectoryFiles.Add(fileInfo.FullName);
+                        }
+                    });
                 }
             }
 

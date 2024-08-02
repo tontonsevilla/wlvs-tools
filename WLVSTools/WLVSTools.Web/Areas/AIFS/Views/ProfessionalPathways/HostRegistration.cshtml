@@ -30,7 +30,7 @@
             <div class="row mb-3">
                 <div class="col-sm-12">
                     @Html.LabelFor(m => m.Url)
-                    @Html.TextBoxFor(m => m.Url, new { @class = "form-control" })
+                    @Html.DropDownListFor(m => m.Url, Model.UrlList, null, new { @class = "form-control" })
                     @Html.ValidationMessageFor(m => m.Url)
                 </div>
             </div>
