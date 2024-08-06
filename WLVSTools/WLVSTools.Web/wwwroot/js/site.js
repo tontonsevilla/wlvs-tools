@@ -12,6 +12,9 @@ function sendRequest(url, method = 'GET', data = undefined) {
         method: method,
         data: data,
         dataType: "json"
+    })
+    .always(function (data, textStatus, errorThrown) {
+        $.customLoader.removeImage();
     });
 }
 
