@@ -9,6 +9,8 @@
   <ItemGroup>
     <Content Remove="wwwroot\js\pathConfig.js" />
     <Content Remove="wwwroot\js\site.js" />
+    <Content Remove="wwwroot\plugins\custom\show-loader\custom-loader.js" />
+    <Content Remove="wwwroot\plugins\custom\show-loader\images\progress.gif" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +30,8 @@
   <ItemGroup>
     <None Include="wwwroot\js\pathConfig.js" />
     <None Include="wwwroot\js\site.js" />
+    <None Include="wwwroot\plugins\custom\show-loader\custom-loader.js" />
+    <None Include="wwwroot\plugins\custom\show-loader\images\progress.gif" />
   </ItemGroup>
 
   <ItemGroup>

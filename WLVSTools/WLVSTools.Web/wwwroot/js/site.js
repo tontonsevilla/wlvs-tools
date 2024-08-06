@@ -5,6 +5,8 @@
  * @returns {jqXHR}
  */
 function sendRequest(url, method = 'GET', data = undefined) {
+    $.customLoader.loadImage();
+
     return $.ajax({
         url: $.appendRootToPath(url),
         method: method,
