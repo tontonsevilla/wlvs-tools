@@ -25,6 +25,8 @@ namespace WLVSTools.Web.Controllers
 
         public IActionResult HostRegistration(string type)
         {
+            ModelState.Clear();
+
             var viewModel = new ProfessionalPathwaysRegistration
             {
                 Type = type,
@@ -62,6 +64,8 @@ namespace WLVSTools.Web.Controllers
 
         public IActionResult ParticipantRegistration()
         {
+            ModelState.Clear();
+
             var viewModel = new ParticipatRegistration
             {
                 WebHostEnvironment = _webHostEnvironment

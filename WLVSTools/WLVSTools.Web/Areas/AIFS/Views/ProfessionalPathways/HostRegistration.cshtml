@@ -35,6 +35,7 @@
                 </div>
             </div>
             <button type="submit" class="btn btn-primary fa-pull-right">Register</button>
+            <a id="lnkGoTo" target="_blank" href="" class="btn btn-primary fa-pull-right mr-3 disabled">Go to URL <i class="fa fa-external-link"></i></a>
         </div>
     </form>
 </div>
@@ -46,26 +47,7 @@
 </div>
 
 @section Styles{
-    <style>
-        pre {
-            background-color: ghostwhite;
-            border: 1px solid silver;
-            padding: 10px 20px;
-            margin: 20px;
-        }
-
-        .json-key {
-            color: brown;
-        }
-
-        .json-value {
-            color: navy;
-        }
-
-        .json-string {
-            color: olive;
-        }
-    </style>
+    <link rel="stylesheet" href="~/css/json_style.css">
 }
 
 @section Scripts{
@@ -82,42 +64,38 @@
                 }
             });
 
+            $("#Url").on("change", function () {
+                let url = $(this).val();
+                let lnkGoTo = $("#lnkGoTo");
+
+                if (url != "") {
+                    lnkGoTo.prop("href", url);
+                    lnkGoTo.removeClass("disabled");
+                } else {
+                    lnkGoTo.prop("href", "");
+                    lnkGoTo.addClass("disabled");
+                }
+            });
+
             $("#Country").trigger("change");
+            $("#Url").trigger("change");
         });
     </script>
 
     @if (Model != null && Model.Personalnfo != null)
     {
         <script>
-    $(function () {
-        $('#resultContainer').html(prettyPrint(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Personalnfo))));
+            $(function () {
+                var prettyPrint = new PrettyPrint(JSON.parse('@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Personalnfo))'), true);
 
-        $(".btn-copy").off("click").on("click", function () {
-            let value = $(this).parent().text().replace(/["']/g, "");
-            navigator.clipboard.writeText(value);
-            toastr.success("Copy '" + value + "'", "Successful");
-        });
-    });
+                $('#resultContainer').html(prettyPrint.print());
 
-    function replacer (match, pIndent, pKey, pVal, pEnd) {
-        var key = '<span class=json-key>';
-        var val = '<span class=json-value>';
-        var str = '<span class=json-string>';
-        var r = pIndent || '';
-        if (pKey)
-            r = r + key + pKey.replace(/[": ]/g, '') + '</span>: ';
-        if (pVal)
-            r = r + (pVal[0] == '"' ? str : val) + pVal + '<button type="button" class="btn-copy btn btn-xs btn-success ml-1"><i class="fas fa-copy"></i></button></span>';
-        return r + (pEnd || '');
-    }
-
-    function prettyPrint(obj) {
-        var jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg;
-        return JSON.stringify(obj, null, 3)
-            .replace(/&/g, '&amp;').replace(/\\"/g, '&quot;')
-            .replace(/</g, '&lt;').replace(/>/g, '&gt;')
-            .replace(jsonLine, replacer);
-    }
+                $(".btn-copy").off("click").on("click", function () {
+                    let value = $(this).parent().text().replace(/["']/g, "");
+                    navigator.clipboard.writeText(value);
+                    toastr.success("Copy '" + value + "'", "Successful");
+                });
+            });
         </script>
     }
 
