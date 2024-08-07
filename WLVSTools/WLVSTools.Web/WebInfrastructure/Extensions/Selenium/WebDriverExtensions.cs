@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
 using WLVSTools.Web.WebInfrastructure.Selenium.Interfaces;
+using SeleniumExtras.WaitHelpers;
 
 namespace WLVSTools.Web.WebInfrastructure.Extensions.Selenium
 {
@@ -37,7 +38,10 @@ namespace WLVSTools.Web.WebInfrastructure.Extensions.Selenium
                 var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeoutInSeconds));
                 element = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(by));
             }
-            catch { }
+            catch
+            {
+                throw;
+            }
 
             return element;
         }
@@ -59,6 +63,16 @@ namespace WLVSTools.Web.WebInfrastructure.Extensions.Selenium
         {
             var js = driver as IJavaScriptExecutor;
             js.ExecuteScript("window.scrollBy(0,document.body.scrollHeight)");
+        }
+
+        public static void WaitForAjax(this IWebDriver driver, int timeoutInSeconds)
+        {
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeoutInSeconds));
+
+            wait.Until((d) => {
+                var js = driver as IJavaScriptExecutor;
+                return (bool) js.ExecuteScript("return jQuery.active == 0");
+            });
         }
     }
 }

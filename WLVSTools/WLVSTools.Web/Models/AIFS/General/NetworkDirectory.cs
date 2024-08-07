@@ -6,8 +6,17 @@ namespace WLVSTools.Web.Models.AIFS.General
     {
         public NetworkDirectory()
         {
-                DirectoryFiles = new List<string>();
+            DirectoryFiles = new List<string>();
         }
+
+        [Display(Name = "User Name"), Required]
+        public string UserName { get; set; }
+
+        [Required]
+        public string Password { get; set; }
+
+        [Display(Name = "Domain Name"), Required]
+        public string DomainName { get; set; }
 
         [Required]
         public string? Path { get; set; }

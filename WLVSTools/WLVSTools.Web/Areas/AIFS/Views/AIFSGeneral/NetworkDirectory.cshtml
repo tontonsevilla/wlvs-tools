@@ -13,6 +13,23 @@
         <div class="card-body">
             <div class="row mb-3">
                 <div class="col-sm-12 col-md-4">
+                    @Html.LabelFor(m => m.DomainName)
+                    @Html.TextBoxFor(m => m.DomainName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.DomainName)
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    @Html.LabelFor(m => m.UserName)
+                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.UserName)
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    @Html.LabelFor(m => m.Password)
+                    @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @type = "password" })
+                    @Html.ValidationMessageFor(m => m.Password)
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-12 col-md-4">
                     @Html.LabelFor(m => m.Path)
                     @Html.TextBoxFor(m => m.Path, new { @class = "form-control" })
                     @Html.ValidationMessageFor(m => m.Path)
