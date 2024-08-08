@@ -1,5 +1,5 @@
 ﻿/**
- * Send API Request
+ * Send API Request.
  * @param {any} url
  * @param {any} method
  * @returns {jqXHR}
@@ -27,6 +27,10 @@ function sendRequest(url, method = 'GET', data = undefined, requestingBtnElement
     });
 }
 
+/**
+ * Show Spinner on the button upon click.
+ * @param {any} element
+ */
 function ButtonClickSpinner(element) {
     var _element = element;
     var defaultButtonText = $(_element).html();
@@ -34,7 +38,7 @@ function ButtonClickSpinner(element) {
     this.showSpinner = function () {
         $(_element).html(`
             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            Loading...
+            Please wait...
         `);
     };
 
@@ -42,14 +46,11 @@ function ButtonClickSpinner(element) {
         $(_element).html(defaultButtonText);
     };
 }
-function showClickLoader(clickElement) {
-    
-
-
-}
 
 /**
- * Show json in a pretty print fashion
+ * Show json in a pretty print fashion.
+ * @param {any} jsonObject
+ * @param {boolean} withCopyButton  
  */
 function PrettyPrint(jsonObject, withCopyButton = false) {
     var _jsonObject = jsonObject;
@@ -74,6 +75,10 @@ function PrettyPrint(jsonObject, withCopyButton = false) {
         return r + (pEnd || '');
     };
 
+    /**
+     * Pretty Print JSON string.
+     * @returns JSON String
+     */
     this.print = function () {
         var jsonLine = /^( *)("[\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg;
         return JSON.stringify(_jsonObject, null, 3)
@@ -82,3 +87,10 @@ function PrettyPrint(jsonObject, withCopyButton = false) {
             .replace(jsonLine, replacer);
     };
 }
+
+$(function () {
+    $("#btnSubmit, .btnSubmit").on("click", function () {
+        var btnClickSpinner = new ButtonClickSpinner(this);
+        btnClickSpinner.showSpinner();
+    });
+});
