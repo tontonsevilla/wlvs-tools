@@ -1,4 +1,5 @@
-﻿@{ 
+﻿@inject IWebHostEnvironment webHostEnvironment
+@{ 
     var startYear = 2024;
     var currentYear = DateTime.Now.Year;
     var startToCurrentYear = $"{currentYear}";
@@ -9,6 +10,16 @@
     }
 }
 <footer class="main-footer">
+    <div class="row">
+        <div class="col-sm-12">
+            For Debugging Purposes
+            <ul style="list-style: none;">
+                <li>
+                    WebRootPath: @webHostEnvironment.WebRootPath
+                </li>
+            </ul>
+        </div>
+    </div>
     <div class="float-right d-none d-sm-block">
         <b>Version</b> 3.2.0
     </div>

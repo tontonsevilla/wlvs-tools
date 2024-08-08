@@ -4,8 +4,14 @@
  * @param {any} method
  * @returns {jqXHR}
  */
-function sendRequest(url, method = 'GET', data = undefined) {
-    $.customLoader.loadImage();
+function sendRequest(url, method = 'GET', data = undefined, requestingBtnElement = undefined) {
+    var _requestingBtnElement = requestingBtnElement;
+    var btnClickSpinner = new ButtonClickSpinner(_requestingBtnElement)
+
+    if (_requestingBtnElement == undefined)
+        $.customLoader.loadImage();
+    else
+        btnClickSpinner.showSpinner();
 
     return $.ajax({
         url: $.appendRootToPath(url),
@@ -13,9 +19,33 @@ function sendRequest(url, method = 'GET', data = undefined) {
         data: data,
         dataType: "json"
     })
-    .always(function (data, textStatus, errorThrown) {
-        $.customLoader.removeImage();
+    .always(function () {
+        if (_requestingBtnElement == undefined)
+            $.customLoader.removeImage();
+        else
+            btnClickSpinner.hideSpinner();
     });
+}
+
+function ButtonClickSpinner(element) {
+    var _element = element;
+    var defaultButtonText = $(_element).html();
+
+    this.showSpinner = function () {
+        $(_element).html(`
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Loading...
+        `);
+    };
+
+    this.hideSpinner = function () {
+        $(_element).html(defaultButtonText);
+    };
+}
+function showClickLoader(clickElement) {
+    
+
+
 }
 
 /**

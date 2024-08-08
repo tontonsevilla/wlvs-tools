@@ -29,7 +29,7 @@
 @if (Model != null)
 {
     @section Styles{
-        <link rel="stylesheet" href="~/css/json_style.css">
+        <link rel="stylesheet" href="~/Resources/css/json_style.css">
     }
 
     @section Scripts{
@@ -39,7 +39,7 @@
                     let selectedCountry = $("#Country").val();
                     let selectedState = $("#State").val();
 
-                    sendRequest(`/api/Generate/Personalinfo?country=${selectedCountry}&state=${selectedState}`)
+                    sendRequest(`/api/Generate/Personalinfo?country=${selectedCountry}&state=${selectedState}`, 'GET', null, this)
                         .done(function (data, textStatus, jqXHR) {
                             let prettyPrint = new PrettyPrint(data, true);
                             $('#resultContainer').html(prettyPrint.print());
