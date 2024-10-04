@@ -59,6 +59,12 @@ namespace WLVSTools.Web.WebInfrastructure.Extensions.Selenium
             screenshot.SaveAsFile($"Screenshot/SS_Error_{seleniumAutomation.GetType().Name}_{DateTime.Now.ToString("yyyyMMddhhmmss")}.png");
         }
 
+        public static void TakeScreenShot(this IWebDriver driver, ISeleniumAutomationWebScrape seleniumAutomation)
+        {
+            Screenshot screenshot = OpenQA.Selenium.Support.Extensions.WebDriverExtensions.TakeScreenshot(driver);
+            screenshot.SaveAsFile($"Screenshot/SS_Error_{seleniumAutomation.GetType().Name}_{DateTime.Now.ToString("yyyyMMddhhmmss")}.png");
+        }
+
         public static void ScrollToBottom(this IWebDriver driver)
         {
             var js = driver as IJavaScriptExecutor;

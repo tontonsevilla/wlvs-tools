@@ -17,23 +17,26 @@ namespace WLVSTools.Web.WebInfrastructure.Selenium.Automation
         public string State { get; private set; }
 
         public IWebDriver WebDriver { get; set; }
+        public int MaxTimeInSecondsToFindElement { get; set; } = 60;
+        public bool Headless { get; set; } = true;
+        public bool EagerPageLoadStrategy { get; set; } = true;
 
-        public string WebScrape(int maxTimeInSecondsToFindElement = 60)
+        public string WebScrape()
         {
             WebDriver.Navigate().GoToUrl($"https://www.coolgenerator.com/{CountryCode}fake-name-generator");
 
             if (string.IsNullOrWhiteSpace(CountryCode)
                 && !string.IsNullOrWhiteSpace(State))
             {
-                var ddlStateElement = WebDriver.FindElement(By.Name("state"), maxTimeInSecondsToFindElement);
+                var ddlStateElement = WebDriver.FindElement(By.Name("state"), MaxTimeInSecondsToFindElement);
                 ddlStateElement.Click();
                 ddlStateElement.FindElement(By.XPath($"option[@value='{State}']")).Click();
 
-                IWebElement btnGenerate = WebDriver.FindElement(By.XPath("//button[.='Generate']"), maxTimeInSecondsToFindElement);
+                IWebElement btnGenerate = WebDriver.FindElement(By.XPath("//button[.='Generate']"), MaxTimeInSecondsToFindElement);
                 btnGenerate.Click();
             }
 
-            WebDriver.FindElement(By.XPath("//b[.='Basic information']"), maxTimeInSecondsToFindElement);
+            WebDriver.FindElement(By.XPath("//b[.='Basic information']"), MaxTimeInSecondsToFindElement);
 
             return WebDriver.PageSource;
         }

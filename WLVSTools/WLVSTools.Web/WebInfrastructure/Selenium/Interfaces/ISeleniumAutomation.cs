@@ -13,7 +13,10 @@ namespace WLVSTools.Web.WebInfrastructure.Selenium.Interfaces
 
     public interface ISeleniumAutomationWebScrape
     {
+        bool Headless { get; set; }
+        bool EagerPageLoadStrategy { get; set; }
         IWebDriver WebDriver { get; set; }
-        string WebScrape(int maxTimeInSecondsToFindElement = 60);
+        public int MaxTimeInSecondsToFindElement { get; set; }
+        string WebScrape();
     }
 }

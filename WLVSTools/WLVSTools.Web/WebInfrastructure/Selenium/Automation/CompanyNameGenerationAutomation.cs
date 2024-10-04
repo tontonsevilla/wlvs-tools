@@ -7,15 +7,18 @@ namespace WLVSTools.Web.WebInfrastructure.Selenium.Automation
     public class CompanyNameGenerationAutomation : ISeleniumAutomationWebScrape
     {
         public IWebDriver WebDriver { get; set; }
+        public int MaxTimeInSecondsToFindElement { get; set; } = 60;
+        public bool Headless { get; set; } = true;
+        public bool EagerPageLoadStrategy { get; set; } = true;
 
-        public string WebScrape(int maxTimeInSecondsToFindElement = 60)
+        public string WebScrape()
         {
             WebDriver.Navigate().GoToUrl("https://www.coolgenerator.com/company-name-generator");
 
-            var quantityTextBox = WebDriver.FindElement(By.Name("quantity"), maxTimeInSecondsToFindElement);
+            var quantityTextBox = WebDriver.FindElement(By.Name("quantity"), MaxTimeInSecondsToFindElement);
             quantityTextBox.SendKeysCustom("1");
 
-            var generateButton = WebDriver.FindElement(By.XPath("//button[.='Generate']"), maxTimeInSecondsToFindElement);
+            var generateButton = WebDriver.FindElement(By.XPath("//button[.='Generate']"), MaxTimeInSecondsToFindElement);
             generateButton.Click();
 
             return WebDriver.PageSource;

@@ -16,6 +16,10 @@ namespace WLVSTools.Web.Services
         {
             var seleniumManager = new WebInfrastructure.Managers.SeleniumManager();
             var personalInformationGenerationAutomation = new PersonalInformationGenerationAutomation(countryCode, state);
+
+            personalInformationGenerationAutomation.Headless = false;
+            personalInformationGenerationAutomation.EagerPageLoadStrategy = false;
+
             return seleniumManager.WebScrape(personalInformationGenerationAutomation);
         }
 

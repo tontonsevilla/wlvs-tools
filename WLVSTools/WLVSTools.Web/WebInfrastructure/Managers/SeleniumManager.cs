@@ -16,14 +16,16 @@ namespace WLVSTools.Web.WebInfrastructure.Managers
 
         public SeleniumManager()
         {
-            webDriver = new ChromeDriver(@"C:\WebDrivers", options);
+            webDriver = new ChromeDriver(@"C:\Selenium\Chrome\WebDriver", options);
         }
 
         private void setOptions(ISeleniumAutomation seleniumAutomation)
         {
+            options.AddExtension(@"C:\Selenium\Chrome\Extensions\AdBlock_6.9.2.0.crx");
+
             if (seleniumAutomation.Headless)
             {
-                options.AddArguments("headless");
+                options.AddArguments("headless=new");
             }
 
             if (seleniumAutomation.EagerPageLoadStrategy)
@@ -57,8 +59,23 @@ namespace WLVSTools.Web.WebInfrastructure.Managers
             return response;
         }
 
+        private void setOptions(ISeleniumAutomationWebScrape seleniumAutomationWebScrape)
+        {
+            if (seleniumAutomationWebScrape.Headless)
+            {
+                options.AddArguments("headless=new");
+            }
+
+            if (seleniumAutomationWebScrape.EagerPageLoadStrategy)
+            {
+                options.PageLoadStrategy = PageLoadStrategy.Eager;
+            }
+        }
+
         public string WebScrape(ISeleniumAutomationWebScrape seleniumAutomationWebScrape)
         {
+            setOptions(seleniumAutomationWebScrape);
+
             string webScrapeString = "";
 
             try
@@ -68,6 +85,7 @@ namespace WLVSTools.Web.WebInfrastructure.Managers
             }
             catch
             {
+                seleniumAutomationWebScrape.WebDriver.TakeScreenShot(seleniumAutomationWebScrape);
                 throw;
             }
             finally

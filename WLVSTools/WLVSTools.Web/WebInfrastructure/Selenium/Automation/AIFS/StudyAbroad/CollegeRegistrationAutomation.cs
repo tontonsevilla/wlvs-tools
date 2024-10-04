@@ -64,6 +64,12 @@ namespace WLVSTools.Web.WebInfrastructure.Selenium.Automation.AIFS.StudyAbroad
 
             WebDriver.WaitForAjax(maxTimeInSecondsToFindElement);
 
+            var elementProgramCountry = WebDriver.ElementVisible(By.XPath("//select[@id='ddlCountry' and not(@disabled)]"), maxTimeInSecondsToFindElement);
+            var ddlProgramCountry = new SelectElement(elementProgramCountry);
+            ddlProgramCountry.SelectByIndex(1);
+
+            WebDriver.WaitForAjax(maxTimeInSecondsToFindElement);
+
             var elementProgram = WebDriver.ElementVisible(By.XPath("//select[@id='ddlProgram' and not(@disabled)]"), maxTimeInSecondsToFindElement);
             var ddlProgram = new SelectElement(elementProgram);
             ddlProgram.SelectByIndex(1);
