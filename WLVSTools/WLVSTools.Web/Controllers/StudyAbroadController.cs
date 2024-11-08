@@ -55,5 +55,41 @@ namespace WLVSTools.Web.Controllers
 
             return View(viewModel);
         }
+
+        public IActionResult CFLRegistration()
+        {
+            var viewModel = new Registration
+            {
+                WebHostEnvironment = _webHostEnvironment
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult CFLRegistration(Registration viewModel)
+        {
+            viewModel.WebHostEnvironment = _webHostEnvironment;
+
+            if (ModelState.IsValid)
+            {
+                viewModel.Personalnfo = _generateApplicationViewService.PersonalInfo(new Models.DeveloperTools.GenerateFakePersonalInfo
+                {
+                    Country = viewModel.Country,
+                    State = viewModel.State,
+                });
+
+                var manager = new WebInfrastructure.Managers.SeleniumManager();
+                ISeleniumAutomation hostRegistrationAutomation = new CollegeRegistrationAutomation(viewModel);
+
+                manager.Execute(hostRegistrationAutomation);
+            }
+
+            viewModel.RunEndDateTime = DateTime.Now;
+
+            ViewBag.TotalRunTime = viewModel.TotalRunTimeInSeconds;
+
+            return View(viewModel);
+        }
     }
 }

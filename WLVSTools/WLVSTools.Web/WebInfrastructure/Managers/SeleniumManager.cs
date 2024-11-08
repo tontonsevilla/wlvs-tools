@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.Extensions;
-using System.Collections.Generic;
+using System.Net.NetworkInformation;
+using WebDriverManager.DriverConfigs.Impl;
 using WLVSTools.Web.Core.General;
 using WLVSTools.Web.WebInfrastructure.Extensions.Selenium;
 using WLVSTools.Web.WebInfrastructure.Selenium.Interfaces;
@@ -11,18 +11,18 @@ namespace WLVSTools.Web.WebInfrastructure.Managers
     public class SeleniumManager
     {
         const int maxmaxTimeInSecondsToFindElement = 60;
-        ChromeOptions options = new ChromeOptions();
+        ChromeOptions options;
         IWebDriver webDriver;
 
         public SeleniumManager()
         {
-            webDriver = new ChromeDriver(@"C:\Selenium\Chrome\WebDriver", options);
+            new WebDriverManager.DriverManager().SetUpDriver(new ChromeConfig());
+            options = GetOptions();
+            webDriver = new ChromeDriver(options);
         }
 
         private void setOptions(ISeleniumAutomation seleniumAutomation)
         {
-            options.AddExtension(@"C:\Selenium\Chrome\Extensions\AdBlock_6.9.2.0.crx");
-
             if (seleniumAutomation.Headless)
             {
                 options.AddArguments("headless=new");
@@ -32,6 +32,28 @@ namespace WLVSTools.Web.WebInfrastructure.Managers
             {
                 options.PageLoadStrategy = PageLoadStrategy.Eager;
             }
+        }
+
+        private ChromeOptions GetOptions()
+        {
+            ChromeOptions options = new ChromeOptions();
+            options.AcceptInsecureCertificates = true;
+
+            options.AddExcludedArgument("enable-automation");
+            options.AddArgument("disable-extensions");
+            options.AddArgument("disable-infobars");
+            options.AddArgument("disable-notifications");
+            options.AddArgument("disable-web-security");
+            options.AddArgument("dns-prefetch-disable");
+            options.AddArgument("disable-browser-side-navigation");
+            options.AddArgument("disable-gpu");
+            options.AddArgument("always-authorize-plugins");
+            options.AddArgument("load-extension=src/main/resources/chrome_load_stopper");
+            //options.AddUserProfilePreference("download.default_directory", _globalProperties.datasetlocation);
+
+            options.AddExtension(@"C:\Selenium\Chrome\Extensions\AdBlock_6.9.2.0.crx");
+
+            return options;
         }
 
         public ServiceResponse<ValueResponse<String>> Execute(ISeleniumAutomation seleniumAutomation)
@@ -52,8 +74,8 @@ namespace WLVSTools.Web.WebInfrastructure.Managers
             }
             finally
             {
-                seleniumAutomation.WebDriver.Close();
-                seleniumAutomation.WebDriver.Dispose();
+                seleniumAutomation.WebDriver.TakeScreenShot(seleniumAutomation);
+                seleniumAutomation.WebDriver.Quit();
             }
 
             return response;
@@ -90,8 +112,7 @@ namespace WLVSTools.Web.WebInfrastructure.Managers
             }
             finally
             {
-                seleniumAutomationWebScrape.WebDriver.Close();
-                seleniumAutomationWebScrape.WebDriver.Dispose();
+                seleniumAutomationWebScrape.WebDriver.Quit();
             }
 
             return webScrapeString;

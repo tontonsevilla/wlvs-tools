@@ -9,8 +9,8 @@ namespace WLVSTools.Web.Models.DeveloperTools
         public string? Gender { get; set; }
         public string? Email { get; set; }
         public string Title { get; set; } = "Attorney";
-        public string Phone { get; set; } = "1234567890";
-        public string MobilePhone { get; set; } = "0987654321";
+        public string Phone { get; set; } = "(123) 456-7890";
+        public string MobilePhone { get; set; } = "(098) 765-4321";
 
         public string Password { get; set; } = "P@ssw0rd";
         public Address? Address { get; set; }
